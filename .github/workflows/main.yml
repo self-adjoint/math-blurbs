@@ -26,25 +26,3 @@ jobs:
           publish_dir: .
           include_files: main.pdf   # ← change to match your output PDF name
           force_orphan: true        # keeps the branch history to a single commit
-```
-
-> `force_orphan: true` is the key setting — it rewrites the `pdf` branch with only one commit every time, so you never accumulate old PDF versions in the branch history.
-
-### 2. Allow Actions to write to your repo
-
-Go to your repo → **Settings → Actions → General → Workflow permissions** and set it to **"Read and write permissions"**.
-
-### 3. Trigger the first run
-
-Push any commit to `main`. The Action will run, compile your PDF, and create the `pdf` branch automatically.
-
-### 4. Get the permanent download URL
-
-Once the `pdf` branch exists, your PDF will always be available at:
-```
-https://github.com/<user>/<repo>/blob/pdf/main.pdf
-```
-
-For a **direct download link** (bypasses the GitHub preview page), use:
-```
-https://raw.githubusercontent.com/<user>/<repo>/refs/heads/pdf/main.pdf
