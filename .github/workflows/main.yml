@@ -22,10 +22,11 @@ jobs:
           root_file: main.tex
 
       - name: Deploy PDF to pdf branch
-        uses: peaceiris/actions-gh-pages@v3.9.3
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_branch: pdf
-          publish_dir: .
-          exclude_assets: '**,!main.pdf'
-          force_orphan: true
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git checkout --orphan pdf-tmp
+          git reset
+          git add main.pdf
+          git commit -m "Update PDF"
+          git push origin pdf-tmp:pdf --force
