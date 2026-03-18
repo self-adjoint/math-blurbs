@@ -47,9 +47,12 @@
 \usepackage[colorlinks,linkcolor=.,citecolor=blue,urlcolor=violet]{hyperref}
 \usepackage[nameinlink]{cleveref} % nameinlink ensures that the entire element is clickable in the pdf, not just the number
 
+% Local packages to be loaded %
+\usepackage{timestamps}
+
 \title{A \LaTeX\ document}
 \author{\texttt{self-adjoint}}
-\date{January 7, 2026}
+\date{\DTMToday \ \DTMcurrenttime \ (\DTMcurrentzone)}
 
 \begin{document}
 

@@ -1,0 +1,38 @@
+% File created as 'timestamps.sty' March 18, 2026
+
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{timestamps}[2022/11/05 Timestamps]
+
+% Date, time and time zone customization using the datetime2 package https://ctan.org/pkg/datetime2
+% \usepackage[showisoZ=false]{datetime2} %For displaying the current date and time
+% "showisoZ=false" to display the time zone numerically (e.g. UTC+1/Alpha time zone renders as +01:00 instead of A)
+% "showzoneminutes=false" to display the time zone without the minutes (e.g. +01 instead of +01:00)
+\RequirePackage[showisoZ=false]{datetime2}
+
+% Defining boolean variables to handle different solution-printing configurations (no solutions, solutions in-place only, solutions at the end only, solutions in-place and at the end)
+\newif\ifDayMonthYear
+
+%%% PACKAGE OPTIONS FOR DIFFERENT SOLUTION-PRINTING CONFIGURATIONS %%%
+\DeclareOption{dmy}{\DayMonthYeartrue}% If included, day will be printed before month
+\ProcessOptions\relax
+
+% Adapted from https://tex.stackexchange.com/a/454168
+\DTMnewdatestyle{newdate}{% Defining date format (MMDDYYYY, month name spelled out, no leading zero for day)
+    \ifDayMonthYear
+        \renewcommand*{\DTMdisplaydate}[4]{\number##3~\DTMenglishmonthname{##2}, ##1}
+    \else
+        \renewcommand*{\DTMdisplaydate}[4]{\DTMenglishmonthname{##2}~\number##3, ##1}
+    \fi
+    \renewcommand*{\DTMDisplaydate}{\DTMdisplaydate}
+}
+
+% Time zone is controlled by the latexmkrc file. Supported time zones are listed here: https://www.php.net/manual/en/timezones.php
+\newcommand*{\utcpm}[1]{% Defining time zone hour format (so \utcpm{0} returns nothing, \utcpm{5} returns +5, \utcpm{-4} returns -4)
+\ifboolexpe{test{\ifnumequal{#1}{0}}}{}{\ifnum#1<0\else+\fi{#1}}}
+\DTMnewzonestyle{newzone}{% Defining time zone format (UTC+/- format according to \utcpm defined above, no leading zero for hour, minutes displayed only if nonzero)
+    \renewcommand*{\DTMdisplayzone}[2]{UTC\ifboolexpe{test{\ifnumequal{##2}{0}}}{\utcpm{\number##1}}{\utcpm{\number##1}:##2}}
+}
+\AtBeginDocument{
+    \DTMsetdatestyle{newdate}
+    \DTMsetzonestyle{newzone}
+}
