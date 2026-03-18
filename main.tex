@@ -1,7 +1,51 @@
 \documentclass{article}
 
-\usepackage{amsmath}
-% \usepackage{timestamps}
+\usepackage[english]{babel}
+\usepackage{graphicx}
+\usepackage{framed}
+\usepackage[normalem]{ulem}
+\usepackage{indentfirst}
+\usepackage{amsmath,amsthm,amssymb,amsfonts}
+\usepackage{mathtools} % Wraparound amsmath. For fancy math typesetting
+\usepackage[nointegrals]{wasysym} % nointegrals prevents wasysym from overwriting integral symbols from LaTeX and amsmath
+\usepackage{bbm} % For extended bold and blackboard bold characters
+\usepackage[italicdiff]{physics} % italicdiff causes derivatives to be rendered with italic d's instead of upright d's
+\usepackage[T1]{fontenc}
+\usepackage{xparse}
+\usepackage{xstring}
+\usepackage{xspace}
+% \usepackage{pifont} % For unusual symbols
+% \usepackage{mathdots} % For unusual combinations of dots
+\usepackage{stmaryrd} % For \llbracket and \rrbracket (ring of formal power series)
+\usepackage{nicematrix}
+\usepackage{fontawesome5} % For fancy graphic symbols
+\usepackage{wrapfig}
+\usepackage{lmodern,mathrsfs}
+\usepackage[inline,shortlabels]{enumitem}
+\setlist{topsep=2pt,itemsep=2pt,parsep=0pt,partopsep=0pt}
+\usepackage[table,dvipsnames]{xcolor}
+\usepackage[utf8]{inputenc}
+\usepackage{csquotes} % Must be loaded AFTER inputenc
+\usepackage{imakeidx}
+\makeindex[intoc,title={Index}]
+\usepackage[a4paper,top=0.7in,bottom=0.7in,left=0.5in,right=0.5in]{geometry}
+\usepackage[most]{tcolorbox}
+\usepackage{tikz,tikz-3dplot,tikz-cd,tkz-tab,tkz-euclide,pgf,pgfplots}
+\usetikzlibrary{shapes}
+\pgfplotsset{compat=newest}
+\usepackage{subfiles}
+\graphicspath{{images/}{../images/}} % To allow rendering of images from the main file as well as subfiles
+% \usepackage{comment} % For commenting large blocks of text and math efficiently
+% \usepackage{fancyvrb} % For custom verbatim environments
+\usepackage{multicol}
+\usepackage[bottom,multiple]{footmisc} % Ensures footnotes are at the bottom of the page, and separates footnotes by a comma if they are adjacent
+\usepackage[backend=bibtex,style=numeric]{biblatex}
+\renewcommand*{\finalnamedelim}{\addcomma\addspace} % Forces authors' names to be separated by comma, instead of "and"
+% \addbibresource{bibliography}
+\usepackage{minted} % Allows input of raw code, such as Python code
+\usepackage{xurl} % Allows more control over urls, such as line breaks within a url
+\usepackage[colorlinks,linkcolor=.,citecolor=blue,urlcolor=violet]{hyperref}
+\usepackage[nameinlink]{cleveref} % nameinlink ensures that the entire element is clickable in the pdf, not just the number
 
 \title{A \LaTeX\ document}
 \author{\texttt{self-adjoint}}
