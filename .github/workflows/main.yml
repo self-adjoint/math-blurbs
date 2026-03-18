@@ -3,7 +3,10 @@ name: Compile LaTeX and Publish PDF
 on:
   push:
     branches:
-      - main   # or 'master', whichever you use
+      - main
+
+permissions:
+  contents: write
 
 jobs:
   build:
@@ -16,7 +19,7 @@ jobs:
       - name: Compile LaTeX
         uses: xu-cheng/latex-action@v3
         with:
-          root_file: main.tex   # ← change to your root .tex filename
+          root_file: main.tex
 
       - name: Deploy PDF to pdf branch
         uses: peaceiris/actions-gh-pages@v4
@@ -24,5 +27,5 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_branch: pdf
           publish_dir: .
-          include_files: main.pdf   # ← change to match your output PDF name
-          force_orphan: true        # keeps the branch history to a single commit
+          exclude_assets: '**,!main.pdf'
+          force_orphan: true
