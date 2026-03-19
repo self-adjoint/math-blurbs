@@ -48,10 +48,36 @@
 \usepackage[nameinlink]{cleveref} % nameinlink ensures that the entire element is clickable in the pdf, not just the number
 
 % Local packages to be loaded %
+\usepackage{commands}
 \usepackage{labeled_boxes}
 \usepackage{matrices}
 \usepackage{python_boxes}
 \usepackage{timestamps}
+
+\newcommand{\remind}[1]{\textcolor{red}{\textbf{#1}}} % To remind me of unfinished work to fix later
+\newcommand{\hide}[1]{} % To hide large blocks of code without using % symbols
+
+% Same as \href, but the text appears in typewriter font and in a custom color
+\newcommand{\Href}[3][red!50!black]{\href{#2}{\textcolor{#1}{\texttt{#3}}}}
+
+\usepackage{fancyhdr}
+% To set the header and footer on each page
+\fancyhead[L]{\sffamily\nouppercase{\leftmark}}
+% \fancyhead[R]{\sffamily\nouppercase{\rightmark}}
+% \fancyhead[R]{\sffamily\itshape Version of \DTMToday, \DTMcurrenttime \ (\DTMcurrentzone)}
+\fancyhead[R]{\sffamily\faCalendar* \ \DTMToday \hspace{\fsize} \faClock \ \DTMcurrenttime \ (\DTMcurrentzone)}
+\fancyfoot[C]{\sffamily\thepage}
+\renewcommand{\headrulewidth}{0.5pt}
+\renewcommand{\footrulewidth}{0.5pt}
+\setlength{\headheight}{15pt}
+\pagestyle{fancy}
+
+% To set the footer on the first page of each chapter
+\fancypagestyle{plain}{
+\fancyhf{}
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0pt}
+\fancyfoot[C]{\sffamily\thepage}}
 
 \title{A \LaTeX\ document}
 \author{\texttt{self-adjoint}}
@@ -108,5 +134,9 @@ $$1+1=2$$
 \end{flagbox}
 
 $\mat{6,5}{4,3}$
+
+$\limk f(k)=\limk\limits f(k)=0$
+$$\limk f(k)=\limk\nolimits f(k)=0$$
+
 
 \end{document}
