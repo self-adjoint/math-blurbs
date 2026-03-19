@@ -1,0 +1,95 @@
+% File created as 'python_boxes.sty' August 5, 2023
+
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{python_boxes}[2023/08/05 Python Boxes]
+
+\RequirePackage{tcolorbox}
+\tcbuselibrary{skins} % required for advanced box styles e.g. enhanced (this library also loads TikZ)
+\tcbuselibrary{breakable} % required for breakable boxes
+\tcbuselibrary{minted} % tcolorbox minted library, required to use the "minted" tcb listing engine (this library is not loaded by the option [most])
+
+\RequirePackage{xparse}
+
+% Custom tcolorbox style for Python code (not the code or the box it appears in, just the options for the box)
+\tcbset{
+    pythoncodebox/.style={
+        enhanced jigsaw, breakable,
+        colback=gray!10, colframe=gray!20!black,
+        boxrule=1pt,
+        top=2pt, bottom=2pt, left=2pt, right=2pt,
+        sharp corners, beforeafter skip=10pt,
+        attach boxed title to top left,
+        boxed title style={
+            empty,
+            top=0pt, bottom=0pt, left=2pt, right=2pt,
+            interior code={
+                \fill[fill=tcbcolframe] (frame.south west)
+                -- ([yshift=-4pt]frame.north west)
+                to[out=90,in=180] ([xshift=4pt]frame.north west)
+                -- ([xshift=-8pt]frame.north east)
+                to[out=0,in=180] ([xshift=16pt]frame.south east)
+                -- cycle;
+            }
+        },
+        title={#1}, % Argument of pythoncodebox specifies the title
+        fonttitle=\sffamily\bfseries,
+    },
+    pythoncodebox/.default={}, % Default is No title
+    %%% Starred version has no frame %%%
+    pythoncodebox*/.style={
+        enhanced jigsaw, breakable,
+        colback=gray!10, coltitle=gray!20!black, colbacktitle=tcbcolback,
+        frame hidden,
+        top=2pt, bottom=2pt, left=2pt, right=2pt,
+        sharp corners, beforeafter skip=10pt,
+        attach boxed title to top text left={yshift=-1mm},
+        boxed title style={
+            empty,
+            top=0pt, bottom=0pt, left=2pt, right=2pt,
+            interior code={
+                \fill[fill=tcbcolback] (interior.south west)
+                -- ([yshift=-4pt]interior.north west)
+                to[out=90,in=180] ([xshift=4pt]interior.north west)
+                -- ([xshift=-8pt]interior.north east)
+                to[out=0,in=180] ([xshift=16pt]interior.south east)
+                -- cycle;
+            }
+        },
+        title={#1}, % Argument of pythoncodebox specifies the title
+        fonttitle=\sffamily\bfseries,
+    },
+    pythoncodebox*/.default={}, % Default is No title
+}
+
+% Custom tcolorbox for Python code (not the code itself, just the box it appears in)
+\newtcolorbox{pythonbox}[1][]{pythoncodebox=#1}
+\newtcolorbox{pythonbox*}[1][]{pythoncodebox*=#1} % Starred version has no frame
+
+% Custom tcblisting environment for Python code, using the "minted" tcb listing engine
+% Adapted from https://tex.stackexchange.com/a/402096
+\NewTCBListing{python}{ !O{} !D(){} !G{} }{
+    listing engine=minted,
+    listing only,
+    pythoncodebox={#1}, % First argument specifies the title (if any)
+    minted language=python3,
+    minted options/.expanded={
+        autogobble, breaklines, mathescape,
+        #2, % Second argument, delimited by (), denotes options for the minted environment
+    },
+    #3, % Third argument, delimited by {}, denotes options for the tcolorbox
+}
+%%% Starred version has no frame %%%
+\NewTCBListing{python*}{ !O{} !D(){} !G{} }{
+    listing engine=minted,
+    listing only,
+    pythoncodebox*={#1}, % First argument specifies the title (if any)
+    minted language=python3,
+    minted options/.expanded={
+        autogobble, breaklines, mathescape,
+        #2, % Second argument, delimited by (), denotes options for the minted environment
+    },
+    #3, % Third argument, delimited by {}, denotes options for the tcolorbox
+}
+
+% Inline Python code
+\newmintinline[pycode]{python}{}
