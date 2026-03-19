@@ -48,6 +48,7 @@
 \usepackage[nameinlink]{cleveref} % nameinlink ensures that the entire element is clickable in the pdf, not just the number
 
 % Local packages to be loaded %
+\usepackage{labeled_boxes}
 \usepackage{python_boxes}
 \usepackage{timestamps}
 
@@ -92,5 +93,17 @@ $$1+1=2$$
     result = sum(Math.fib(42))
     print(f"The answer is {result}")
 \end{python}
+
+\begin{filingbox}{title}
+    some text
+\end{filingbox}
+
+\begin{railingbox}{title}
+    some text
+\end{railingbox}
+
+\begin{flagbox}{title}
+    some text
+\end{flagbox}
 
 \end{document}
