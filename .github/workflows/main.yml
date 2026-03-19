@@ -17,6 +17,11 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Set timezone from latexmkrc
+        run: |
+          TZ=$(grep -oP "(?<=\\\$ENV\{'TZ'\}=')[^']+" latexmkrc)
+          echo "TZ=$TZ" >> $GITHUB_ENV
+
       - name: Compile LaTeX
         uses: xu-cheng/latex-action@v3
         with:
