@@ -77,6 +77,8 @@
 \newcommand{\dx}{\,dx}
 \newcommand{\dy}{\,dy}
 \newcommand{\dt}{\,dt}
+\newcommand{\dmu}{\,d\mu}
+\newcommand{\dtheta}{\,d\theta}
 
 % Shortcuts for trigonometric (circular and hyperbolic) functions
 \def\do#1{\csdef{#1}{\trigbraces{\operatorname{#1}}}}
@@ -123,5 +125,39 @@
 \newcommand*{\setbuild}[2]{\left\{#1\,\middle|\,#2\right\}}
 \newcommand*{\bsetbuild}[2]{\left[#1\,\middle|\,#2\right]}
 
-% \fsize stores the current font size but is expandable (and can be called later without using \makeatletter and \makeatother)
-\def\fsize{\dimexpr\f@size pt\relax}
+% \fsize stores the current font size but is expandable (and can be called later without using \makeatletter and \makeatother). Similarly for the other macros.
+% See https://www.latex-project.org/help/documentation/fntguide.pdf (part of the LaTeX documentation) for more details.
+\def\fsize{\dimexpr\f@size pt\relax}            % Font size
+\def\fbskip{\dimexpr\f@baselineskip pt\relax}   % Baseline skip
+\def\tfsize{\dimexpr\tf@size pt\relax}          % Math size
+\def\sfsize{\dimexpr\sf@size pt\relax}          % Script math size
+\def\ssfsize{\dimexpr\ssf@size pt\relax}        % Scriptscript math size
+% For example, \fontsize{20}{24} sets \f@size to 20 and \f@baselineskip to 24, while \fontsize{2\fsize}{3\fbskip} doubles \f@size and triples \f@baselineskip
+
+% align and align* environments with inline size
+\newenvironment{talign}{\let\displaystyle\textstyle\align}{\endalign}
+\newenvironment{talign*}{\let\displaystyle\textstyle\csname align*\endcsname}{\endalign}
+
+\usepackage[explicit]{titlesec}
+\titleformat{\section}{\fontsize{24}{30}\sffamily\bfseries}{\thesection}{20pt}{#1}
+\titleformat{\subsection}{\fontsize{16}{18}\sffamily\bfseries}{\thesubsection}{12pt}{#1}
+\titleformat{\subsubsection}{\fontsize{10}{12}\sffamily\large\bfseries}{\thesubsubsection}{8pt}{#1}
+\titlespacing*{\section}{0pt}{5pt}{5pt}
+\titlespacing*{\subsection}{0pt}{5pt}{5pt}
+\titlespacing*{\subsubsection}{0pt}{5pt}{5pt}
+
+\newcommand{\Disp}{\displaystyle}
+\newcommand{\qe}{\hfill\(\bigtriangledown\)}
+\DeclareMathAlphabet\mathbfcal{OMS}{cmsy}{b}{n}
+\setlength{\parindent}{0.2in}
+\setlength{\parskip}{0pt}
+\setlength{\columnseprule}{0pt}
+
+% Modify spacing above and below display equations
+\g@addto@macro\normalsize{
+    \setlength\abovedisplayskip{3pt}
+    \setlength\belowdisplayskip{3pt}
+    \setlength\abovedisplayshortskip{0pt}
+    \setlength\belowdisplayshortskip{0pt}
+}
+
