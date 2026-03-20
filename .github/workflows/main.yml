@@ -42,7 +42,7 @@ jobs:
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git checkout --orphan pdf-tmp
           git reset
-          git add main.pdf Integration/Leibniz_Integral_Rule.tex
+          git add main.pdf Integration/Leibniz_Integral_Rule.pdf
           git commit -m "Update PDF"
           git push origin pdf-tmp:pdf --force
 
