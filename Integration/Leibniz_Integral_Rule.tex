@@ -1,0 +1,743 @@
+\documentclass[main.tex]{subfiles}
+
+\title{Leibniz Integral Rule}
+\author{Senan Sekhon}
+\date{\DTMToday}
+% Created April 25, 2021
+
+\begin{document}
+
+\maketitle
+
+\newtcolorbox{diagrambox}[1]{
+    enhanced,
+    colback=gray!5, colframe=black,
+    segmentation style=solid,
+    center upper,
+    title={#1}, fonttitle=\large\sffamily\bfseries, center title,
+}
+
+\section{The Leibniz Integral Rule}
+
+\begin{theorem}[Leibniz Integral Rule -- Riemann Integral]\label{leibniz_integral_rule_riemann_integral}
+    Suppose $I\sub\R$ is an open interval and $f:[a,b]\times I\to\R$, $(x,t)\mapsto f(x,t)$ such that $f$ and $\pdv{f}{t}$ are continuous on $[a,b]\times I$. Define $S:I\to\R$ as follows:
+    \begin{equation*}
+        S(t)=\int_a^b f(x,t)\dx
+    \end{equation*}
+    Then $S$ is differentiable on $I$ and:
+    \begin{equation*}
+        S'(t)=\int_a^b \pdv{f}{t}\/(x,t)\dx
+    \end{equation*}
+\end{theorem}
+\begin{proof}
+    Suppose $t_0\in I$ and $\ep>0$. Since $I$ is an open interval, there exists $\delta_0>0$ such that $[t_0-\delta_0,t_0+\delta_0]\sub I$. Since $\pdv{f}{t}$ is continuous on $[a,b]\times I$, by the \href{https://en.wikipedia.org/wiki/Heine-Cantor_theorem}{Heine-Cantor theorem}, it is uniformly continuous on $[a,b]\times[t_0-\delta_0,t_0+\delta_0]$. Thus there exists $0<\delta<\delta_0$ such that:
+    \begin{align*}
+        \abs{\pdv{f}{t}\/(x,s)-\pdv{f}{t}\/(x,t_0)}<\frac{\ep}{b-a} \text{ for all } x\in[a,b] \text{ and all } s\in I,\abs{s-t_0}<\delta
+    \end{align*}
+    Now suppose $t\in I$, $\abs{t-t_0}<\delta$ and $x\in[a,b]$. By \href{https://en.wikipedia.org/wiki/Mean_value_theorem}{Lagrange's mean value theorem}, there exists $\xi$ (possibly depending on $x$) between $t_0$ and $t$ such that $\frac{f(x,t)-f(x,t_0)}{t-t_0}=\pdv{f}{t}\/(x,\xi)$. This yields:
+    \begin{equation*}
+        \abs{\frac{f(x,t)-f(x,t_0)}{t-t_0}-\pdv{f}{t}\/(x,t_0)}=\abs{\pdv{f}{t}\/(x,\xi)-\pdv{f}{t}\/(x,t_0)}<\frac{\ep}{b-a}
+    \end{equation*}
+    Note that the above inequality holds for all $x\in[a,b]$, even though $\xi$ may depend on $x$. We also have:
+    \begin{align*}
+        \frac{S(t)-S(t_0)}{t-t_0}-\int_a^b \pdv{f}{t}\/(x,t_0)\dx
+        &=\frac{1}{t-t_0}\left(\int_a^b f(x,t)\dx-\int_a^b f(x,t_0)\dx\right)-\int_a^b \pdv{f}{t}\/(x,t_0)\dx \\
+        &=\int_a^b \left(\frac{f(x,t)-f(x,t_0)}{t-t_0}-\pdv{f}{t}\/(x,t_0)\right)\dx
+    \end{align*}
+    This yields:
+    \begin{align*}
+        \abs{\frac{S(t)-S(t_0)}{t-t_0}-\int_a^b \pdv{f}{t}\/(x,t_0)\dx}
+        \le\int_a^b \abs{\frac{f(x,t)-f(x,t_0)}{t-t_0}-\pdv{f}{t}\/(x,t_0)}\dx
+        <\int_a^b \frac{\ep}{b-a}\dx
+        =(b-a)\frac{\ep}{b-a}
+        =\ep
+    \end{align*}
+    Thus $S$ is differentiable at $t_0$ and $S'(t_0)=\int_a^b \pdv{f}{t}\/(x,t_0)\dx$.
+\end{proof}
+
+\begin{diagrambox}{The Leibniz Integral Rule}
+    \pgfplotsset{colormap={Greenwave}{HTML=(11998E) HTML=(38EF7D)}}
+    \pgfmathdeclarefunction{f}{2}{%
+        \pgfmathparse{1+2*(#1/4)^2+2/3*(#2/2)^2-(#1/4)^4-4/3*(#2/4)^4+8*(#1/8)^6+32/3*(#2/8)^6}
+    } % Use https://www.math3d.org to fine-tune the function for visual aid
+    \pgfmathsetmacro{\a}{2}
+    \pgfmathsetmacro{\b}{6}
+    \pgfmathsetmacro{\ti}{3}
+    \pgfmathsetmacro{\tf}{5}
+    \colorlet{f_color}{Bittersweet}
+    \colorlet{a_color}{Rhodamine}
+    \colorlet{b_color}{MidnightBlue}
+    
+    \begin{equation*}
+        \tcbhighmath[
+            colback=white, colframe=black, sharp corners,
+        ]{
+            \dv{t}(\int_a^b f(x,t)\dx)
+            = \int_a^b \pdv{f}{t}\/(x,t)\dx
+        }
+    \end{equation*}
+    \begin{tikzpicture}[scale=0.8, transform shape]
+        \begin{axis}[view={120}{30},
+            scale=2,
+            unit vector ratio={1 1 1}, % Uniform scaling of axes
+            axis lines=center, % Render axis lines properly
+            xlabel={$t$}, ylabel={$x$}, zlabel={$f$}, % axis labels
+            x label style=left, y label style=right, z label style=right, % Positions of axis labels
+            xtick=\empty, ytick=\empty, ztick=\empty, % No markings on axes
+            xmin=0, xmax=8, ymin=0, ymax=8, zmin=0, zmax=6, % Axis ranges
+            clip=false % No clipping of picture by axis ranges
+        ]
+            \begin{scope}[canvas is xy plane at z=0]
+                \fill[gray, opacity=0.1] (0,0) rectangle (8,8);
+            \end{scope}
+            
+            % Surface f(x,t)
+            \addplot3[domain=0:8, y domain=0:8, samples=51, colormap name=Greenwave, surf, shader=interp, opacity=0.4]{f(x,y)};
+            \node at (0,7.6,2) {$f(x,t)$}; %Position chosen artificially for visual aid
+
+            % Lower and upper limit curves a(t) and b(t)
+            \addplot3+[no markers, very thick, a_color, samples=51, samples y=0, domain=0:8, variable=\t] ({\t},{\a},0) node[below]{$a$};
+            \addplot3+[no markers, very thick, b_color, samples=51, samples y=0, domain=0:8, variable=\t] ({\t},{\b},0) node[below]{$b$};
+
+            \begin{scope}[canvas is yz plane at x={\ti}]
+                \fill[f_color!60, opacity=0.4, domain={\a}:{\b}, variable=\x] ({\a},0) -- plot ({\x},{f(\x,\ti)}) -- ({\b},0) -- cycle;
+                \draw[thin, smooth, dashed, domain=0:8, samples=51, variable=\x] plot({\x},{f(\x,\ti)});
+                \draw[thick, a_color] ({\a},0) -- ({\a},{f(\a,\ti)});
+                \draw[thick, b_color] ({\b},0) -- ({\b},{f(\b,\ti)});
+                \draw[ultra thick, smooth, f_color, domain={\a}:{\b}, samples=51, variable=\x] plot({\x},{f(\x,\ti)});
+                \draw[thin] (0,0) rectangle (8,6);
+                \node[right] at (8,0) {$t_0$};
+            \end{scope}
+
+            \begin{scope}[canvas is yz plane at x={\tf}]
+                \fill[f_color!60, opacity=0.4, domain={\a}:{\b}, variable=\x] ({\a},0) -- plot ({\x},{f(\x,\tf)}) -- ({\b},0) -- cycle;
+                \draw[thin, smooth, dashed, domain=0:8, samples=51, variable=\x] plot({\x},{f(\x,\tf)});
+                \draw[thick, a_color] ({\a},0) -- ({\a},{f(\a,\tf)});
+                \draw[thick, b_color] ({\b},0) -- ({\b},{f(\b,\tf)});
+                \draw[ultra thick, smooth, f_color, domain={\a}:{\b}, samples=51, variable=\x] plot({\x},{f(\x,\tf)});
+                \draw[thin] (0,0) rectangle (8,6);
+                \node[right] at (8,0) {$t_1$};
+            \end{scope}
+            % Arrow depicting shift from t0 to t1
+            \draw[ultra thick, -latex] ({\ti+0.2},8.2,0) -- ({\tf-0.4},8.2,0);
+        \end{axis}
+    \end{tikzpicture}
+    %
+    \hspace{2em}
+    %
+    \begin{tikzpicture}[scale=0.8, transform shape]
+        \draw[-latex] (0,0) -- (8,0) node[right]{$x$};
+        \draw[-latex] (0,0) -- (0,6) node[left]{$f$};
+        
+        % Filled area under the curves f(x,t0) and f(x,t1)
+        \fill[f_color!60, opacity=0.4, domain={\a}:{\b}, variable=\x] ({\a},0) -- plot ({\x},{f(\x,\ti)}) -- ({\b},0) -- cycle;
+        \fill[f_color!60, opacity=0.4, domain={\a}:{\b}, variable=\x] ({\a},0) -- plot ({\x},{f(\x,\tf)}) -- ({\b},0) -- cycle;
+        
+        % Dashed curves f(x,t0) and f(x,t1) over the whole domain
+        \draw[thin, smooth, dashed, domain=0:8, samples=51, variable=\x] plot({\x},{f(\x,\ti)}) node[right]{$f(x,t_0)$};
+        \draw[thin, smooth, dashed, domain=0:8, samples=51, variable=\x] plot({\x},{f(\x,\tf)}) node[right]{$f(x,t_1)$};
+        
+        % Vertical boundary lines at a and b
+        \draw[very thick, a_color] ({\a},{f(\a,\tf)}) -- ({\a},0) node[below]{$a$};
+        \draw[very thick, b_color] ({\b},{f(\b,\tf)}) -- ({\b},0) node[below]{$b$};
+        
+        % Curves f(x,t0) and f(x,t1)
+        \draw[ultra thick, smooth, f_color, domain={\a}:{\b}, samples=51, variable=\x] plot({\x},{f(\x,\ti)});
+        \draw[ultra thick, smooth, f_color, domain={\a}:{\b}, samples=51, variable=\x] plot({\x},{f(\x,\tf)});
+        
+        % Shaded diagonal lines
+        \path[pattern=north west lines, pattern color=f_color] ({\a},{f(\a,\tf)}) -- plot[domain={\a}:{\b}, variable=\x] ({\x},{f(\x,\tf)}) -- ({\b},{f(\b,\tf)}) -- plot[domain={\b}:{\a}, variable=\x] ({\x},{f(\x,\ti)}) -- cycle;
+
+        % Legend explaining the shaded area
+        \begin{scope}[shift={(2,4.5)}]
+            \draw[thick, draw=f_color, pattern=north west lines, pattern color=f_color] (0,0.5) circle (0.2) node[right, xshift=2mm]{%
+                Change in the area
+            };
+        \end{scope}
+    \end{tikzpicture}
+
+    \tcblower
+    
+    As $t$ moves from $t_0$ to $t_1$, the shaded area changes from $\Disp\int_a^b f(x,t_0)\dx$ to $\Disp\int_a^b f(x,t_1)\dx$.\\
+    Dividing this by $t_1-t_0$ and taking the limit as $t_1-t_0$ becomes small, we get $\Disp\int_a^b \pdv{f}{t}\/(x,t)\dx$.
+\end{diagrambox}
+
+\begin{theorem}[Leibniz Integral Rule -- Improper Riemann Integral]\label{leibniz_integral_rule_improper_riemann_integral}
+    Suppose $I\sub\R$ is an open interval and $f:[a,\infty)\times I\to\R$, $(x,t)\mapsto f(x,t)$ such that:
+    \begin{itemize}
+        \item $f$ is continuous on $[a,\infty)\times I$ improperly Riemann integrable with respect to $x$ on $[a,\infty)$ for each $t\in I$.
+        \item $\pdv{f}{t}$ is continuous on $[a,\infty)\times I$ and improperly Riemann integrable with respect to $x$ on $[a,\infty)$, uniformly in $t\in I$. In other words, for any $\ep>0$, there exists $M>a$ (independent of $t$) such that for all $y>M$ and all $t\in I$, we have $\abs{\int_a^y f(x,t)\dx}<\ep$.
+    \end{itemize}
+    Define $S:I\to\R$ as follows:
+    \begin{equation*}
+        S(t) = \int_a^\infty f(x,t)\dx
+    \end{equation*}
+    Then $S$ is differentiable on $I$ and:
+    \begin{equation*}
+        S'(t) = \int_a^\infty \pdv{f}{t}\/(x,t)\dx
+    \end{equation*}
+\end{theorem}
+\begin{proof}
+    Suppose $(b_n)_{n=1}^\infty$ is a sequence in $(a,\infty)$ and $\limn b_n=\infty$. For each $n\in\N$, define $S_n:I\to\R$ as follows:
+    \begin{equation*}
+        S_n(t) = \int_a^{b_n} f(x,t)\dt
+    \end{equation*}
+    By \Cref{leibniz_integral_rule_riemann_integral}, for each $n\in\N$, we have $S_n'(t)=\int_a^{b_n} \pdv{f}{t}\/(x,t)\dt$. Since $\pdv{f}{t}\/(x,t)$ is improperly Riemann integrable with respect to $x$ on $[a,\infty)$, uniformly in $t$, we have:
+    \begin{equation*}
+        \limn S_n'(t) = \int_a^\infty \pdv{f}{t}\/(x,t)\dt
+    \end{equation*}
+    \remind{FINISH THE PROOF!!!}
+\end{proof}
+
+The Leibniz integral rule can be applied to known integrals to derive related formulas:
+
+\newcommand*{\diffarrowquad}[1][a]{\quad\xrightarrow{\hspace{1ex}\tfrac{d}{da}\hspace{1ex}}\quad}
+
+\begin{example}
+    \begin{align*}
+        \int_0^\infty \frac{1}{x^2+a^2}\dx = \frac{\pi}{2a}
+        &\diffarrowquad
+        \int_0^\infty \frac{1}{(x^2+a^2)^2}\dx = \frac{\pi}{4a^3} \\
+        &\diffarrowquad
+        \int_0^\infty \frac{1}{(x^2+a^2)^3}\dx = \frac{3\pi}{16a^5} \\
+        &\qquad\;\vdots \\
+        &\diffarrowquad
+        \int_0^\infty \frac{1}{(x^2+a^2)^n}\dx = \binom{2n-2}{n-1}\frac{\pi}{(2a)^{2n-1}}
+    \end{align*}
+\end{example}
+
+\begin{example}
+    \begin{align*}
+        \int_0^\infty e^{-ax}\dx = \frac{1}{a}
+        &\diffarrowquad
+        \int_0^\infty xe^{-ax}\dx = \frac{1}{a^2} \\
+        &\diffarrowquad
+        \int_0^\infty x^2e^{-ax}\dx = \frac{2}{a^3} \\
+        &\qquad\;\vdots \\
+        &\diffarrowquad
+        \int_0^\infty x^ne^{-ax}\dx = \frac{n!}{a^{n+1}}
+    \end{align*}
+\end{example}
+
+The Leibniz integral rule can also be used to solve certain integrals, by differentiating them first:
+
+\begin{example}
+    \begin{equation*}
+        S(t) = \int_0^1 \frac{x^t-1}{\log(x)}\dx \tag{$t>-1$}
+    \end{equation*}
+    Differentiating under the integral, we get:
+    \begin{equation*}
+        S'(t) = \int_0^1 x^t\dx = \frac{1}{t+1}
+    \end{equation*}
+    Integrating yields:
+    \begin{equation*}
+        S(t) = \log(t+1)+C
+    \end{equation*}
+    Where $C$ is a constant. Note that the integrand is zero when $t=0$, so $S(0)=0$ and so $C=0$. Thus:
+    \begin{equation*}
+        \int_0^1 \frac{x^t-1}{\log(x)}\dx = \log(t+1)
+    \end{equation*}
+\end{example}
+
+\begin{example}[Dirichlet integral]
+    \begin{equation*}
+        S(t) = \int_0^\infty e^{-tx}\frac{\sin(x)}{x}\dx \tag{$t>0$}
+    \end{equation*}
+    Differentiating under the integral, we get:
+    \begin{equation*}
+        S'(t)
+        = -\int_0^\infty e^{-tx}\sin(x)\dx
+        = -\frac{1}{t^2+1}
+    \end{equation*}
+    Integrating yields:
+    \begin{equation*}
+        S(t) = -\arctan(t) + C
+    \end{equation*}
+    Where $C$ is a constant. Note that the integrand tends to zero as $t\to\infty$, so $\lim_{t\to\infty} S(t)=0$ and so $C=\frac{\pi}{2}$. Thus:
+    \begin{equation*}
+        \int_0^\infty e^{-tx}\frac{\sin(x)}{x}\dx
+        = \frac{\pi}{2}-\arctan(t)
+    \end{equation*}
+    Taking the limit as $t\to0^+$ yields:
+    \begin{equation*}
+        \int_0^\infty \frac{\sin(x)}{x}\dx = \frac{\pi}{2}
+    \end{equation*}
+\end{example}
+
+The following integral was solved in 1844 by \href{https://mathshistory.st-andrews.ac.uk/Biographies/Serret/}{Joseph Serret} (1819 -- 1885).
+
+\begin{example}[Serret's Integral]\label{serret_integral}
+    Consider the following integral:
+    \begin{equation*}
+        I = \int_0^1 \frac{\log(1+x)}{1+x^2}\dx
+    \end{equation*}
+    To evaluate this, we first define $S(t)$ as follows:
+    \begin{equation*}
+        S(t) = \int_0^1 \frac{\log(1+tx)}{1+x^2}\dx
+    \end{equation*}
+    Differentiating under the integral, we get:
+    \begin{equation*}
+        S'(t)
+        = \int_0^1 \frac{x}{(1+tx)(1+x^2)}\dx
+        = -\frac{\log(1+t)}{1+t^2} + \frac{\pi t}{4(1+t^2)} + \frac{\log(2)}{2(1+t^2)}
+    \end{equation*}
+    Note that $S(0)=0$ and $S(1)=I$. Thus, we have:
+    \begin{align*}
+        I
+        = S(1) - S(0)
+        &= \int_0^1 S'(t)\dt \\
+        &= -\int_0^1 \frac{\log(1+t)}{1+t^2}\dt + \frac{\pi}{4}\int_0^1 \frac{t}{1+t^2}\dt + \frac{\log(2)}{2}\int_0^1 \frac{1}{1+t^2}\dt \\
+        &= -\int_0^1 \frac{\log(1+t)}{1+t^2}\dt + \frac{\pi}{4}\qty(\frac{\log(2)}{2}) + \frac{\log(2)}{2}\qty(\frac{\pi}{4}) \\
+        &= -I + \frac{\pi}{4}\log(2)
+    \end{align*}
+    Rearranging yields $2I=\frac{\pi}{4}\log(2)$. Thus:
+    \begin{equation*}
+        \int_0^1 \frac{\log(1+x)}{1+x^2}\dx = \frac{\pi}{8}\log(2)
+    \end{equation*}
+\end{example}
+
+\begin{example}
+    \begin{equation*}
+        S(t) = \int_0^1 \frac{\log(1+tx)}{x\sqrt{1-x^2}}\dx \tag{$t\ge -1$}
+    \end{equation*}
+    Differentiating under the integral (and assuming $-1\le t\le 1$ for now), we get:
+    \begin{equation*}
+        S'(t)
+        = \int_0^1 \frac{1}{(1+tx)\sqrt{1-x^2}}\dx
+        = \frac{\arccos(t)}{\sqrt{1-t^2}}
+    \end{equation*}
+    Integrating yields:
+    \begin{equation*}
+        S(t) = -\frac{\arccos(t)^2}{2}+C
+    \end{equation*}
+    Where $C$ is a constant. Note that the integrand is zero when $t=0$, so $S(0)=0$ and so $C=\frac{\pi^2}{8}$. Thus:
+    \begin{equation*}
+        \int_0^1 \frac{\log(1+tx)}{x\sqrt{1-x^2}}\dx
+        = \frac{\pi^2}{8} - \frac{\arccos(t)^2}{2}
+    \end{equation*}
+    If $t>1$, we instead have:
+    \begin{equation*}
+        S'(t) = \frac{\arccosh(t)}{\sqrt{t^2-1}}
+    \end{equation*}
+    This time, integrating yields:
+    \begin{equation*}
+        S(t) = \frac{\arccosh(t)^2}{2}+K
+    \end{equation*}
+    Where $K$ is a constant. As we have already shown above, we have $S(1)=\frac{\pi^2}{8}$ and so $K=\frac{\pi^2}{8}$. Thus:
+    \begin{equation*}
+        \int_0^1 \frac{\log(1+tx)}{x\sqrt{1-x^2}}\dx
+        = \begin{cases}
+            \dfrac{\pi^2}{8}-\dfrac{\arccos(t)^2}{2} & -1\le t\le 1 \\[5pt]
+            \dfrac{\pi^2}{8}+\dfrac{\arccosh(t)^2}{2} & t>1
+        \end{cases}
+    \end{equation*}
+    Note that the function on the right, although defined piecewise, is analytic at every $t>-1$ (including $t=1$).
+\end{example}
+
+\begin{example}
+    \begin{equation*}
+        S(t) = \int_0^{\tfrac{\pi}{2}} \frac{\arctan(t\tan(x))}{\tan(x)}\dx
+    \end{equation*}
+    Differentiating under the integral, we get:
+    \begin{equation*}
+        S'(t)
+        = \int_0^{\tfrac{\pi}{2}} \frac{1}{1+t^2\tan(x)^2}\dx
+        = \frac{\pi}{2(t+1)}
+    \end{equation*}
+    Integrating yields:
+    \begin{equation*}
+        S(t) = \frac{\pi}{2}\log(t+1)+C
+    \end{equation*}
+    Where $C$ is a constant. Note that the integrand is zero when $t=0$, so $S(0)=0$ and so $C=0$. Thus:
+    \begin{equation*}
+        \int_0^{\tfrac{\pi}{2}} \frac{\arctan(t\tan(x))}{\tan(x)}\dx = \frac{\pi}{2}\log(t+1)
+    \end{equation*}
+    In particular, setting $t=1$ yields:
+    \begin{equation*}
+        \int_0^{\tfrac{\pi}{2}} \frac{x}{\tan(x)}\dx = \frac{\pi}{2}\log(2)
+    \end{equation*}
+\end{example}
+
+\begin{example}
+    \begin{equation*}
+        S(t) = \int_0^\infty e^{-x^2}\cos(tx)\dx
+    \end{equation*}
+    Differentiating under the integral, we get:
+    \begin{equation*}
+        S'(t) = \int_0^\infty -xe^{-x^2}\sin(tx)\dx
+    \end{equation*}
+    Integrating by parts yields:
+    \begin{equation*}
+        S'(t)
+        = \qty(-\frac{1}{2}e^{-x^2}\sin(tx))_{x=0}^{x=\infty}
+        - \int_0^\infty -\frac{t}{2}e^{-x^2}\cos(tx)\dx
+        = \frac{t}{2}\int_0^\infty e^{-x^2}\cos(tx)\dx
+    \end{equation*}
+    Thus $S'(t)=\frac{t}{2}S(t)$. This is a linear first-order ODE in $S(t)$, whose solution is $S(t)=Ce^{-\tfrac{t^2}{4}}$. To find $C$, note that:
+    \begin{equation*}
+        S(0) = \int_0^\infty e^{-x^2}\dx = \frac{\sqrt{\pi}}{2}
+    \end{equation*}
+    Thus:
+    \begin{equation*}
+        \int_0^\infty e^{-x^2}\cos(tx)\dx = \frac{\sqrt{\pi}}{2}e^{-\tfrac{t^2}{4}}
+    \end{equation*}
+\end{example}
+
+\begin{example}
+    \begin{equation*}
+        S(t) = \int_0^\infty \frac{\cos(tx)}{x^2+a^2}\dx
+    \end{equation*}
+    Differentiating under the integral, we get:
+    \begin{equation*}
+        S'(t) = \int_0^\infty -\frac{x\sin(tx)}{x^2+a^2}\dx \tag{Convergent for $t\ne 0$}
+    \end{equation*}
+    Differentiating again, we get:
+    \begin{equation*}
+        S''(t) = \int_0^\infty -\frac{x^2\cos(tx)}{x^2+a^2}\dx \tag{Divergent}
+    \end{equation*}
+    This is a problem, as the integral on the right does not converge. Instead, we can integrate the expression for $S(t)$ by parts:
+    \begin{align*}
+        S(t)
+        = \qty(\frac{\sin(tx)}{t(x^2+a^2)})_{x=0}^{x=\infty}
+        - \int_0^\infty -\frac{2x\sin(tx)}{t(x^2+a^2)^2}\dx
+        = \frac{2}{t}\int_0^\infty \frac{x\sin(tx)}{(x^2+a^2)^2}\dx
+    \end{align*}
+    Call the integral on the right $K(t)$. Now we can differentiate under the integral:
+    \begin{align*}
+        K'(t)
+        &= \int_0^\infty \frac{x^2\cos(tx)}{(x^2+a^2)^2}\dx \\
+        &= \int_0^\infty \frac{\cos(tx)}{x^2+a^2}\dx - a^2\int_0^\infty \frac{\cos(tx)}{(x^2+a^2)^2}\dx \\
+        &= S(t) - a^2\int_0^\infty \frac{\cos(tx)}{(x^2+a^2)^2}\dx
+    \end{align*}
+    Since $K(t)=\frac{t}{2}S(t)$, we can rewrite the above equation as follows:
+    \begin{align*}
+        \frac{t}{2}S'(t) + \frac{1}{2}S(t)
+        &= S(t) - a^2\int_0^\infty \frac{\cos(tx)}{(x^2+a^2)^2}\dx \\
+        \frac{t}{2}S'(t) - \frac{1}{2}S(t)
+        &= -a^2\int_0^\infty \frac{\cos(tx)}{(x^2+a^2)^2}\dx
+    \end{align*}
+    Differentiating under the integral again, we get:
+    \begin{equation*}
+        \frac{t}{2}S''(t) + \frac{1}{2}S'(t) - \frac{1}{2}S'(t)
+        = a^2\int_0^\infty \frac{x\sin(tx)}{(x^2+a^2)^2}\dx
+    \end{equation*}
+    The integral on the right is simply $K(t)=\frac{t}{2}S(t)$. This yields:
+    \begin{align*}
+        \frac{t}{2}S''(t)
+        = a^2\frac{t}{2}S(t)
+    \end{align*}
+    Thus $S''(t)=a^2S(t)$. This is a linear second-order ODE in $S(t)$ with constant coefficients, whose solution is $S(t)=C_1e^{at}+C_2e^{-at}$. To find $C_1$ and $C_2$, we need two equations. First, we have:
+    \begin{equation*}
+        S(0)
+        = \int_0^\infty \frac{1}{x^2+a^2}\dx
+        = \frac{\pi}{2a}
+    \end{equation*}
+    Thus $C_1+C_2=\frac{\pi}{2a}$. Second, we have:
+    \begin{equation*}
+        \lim_{t\to\infty} S(t)
+        = \lim_{t\to\infty} \frac{2}{t}\int_0^\infty \frac{x\sin(tx)}{(x^2+a^2)^2}\dx
+        = 0
+    \end{equation*}
+    This can also be seen by applying the \href{https://en.wikipedia.org/wiki/Riemann%E2%80%93Lebesgue_lemma}{Riemann-Lebesgue lemma} directly to $S(t)$. Thus $C_1=0$, and so $C_2=\frac{\pi}{2a}$. This yields:
+    \begin{equation*}
+        S(t) = \frac{\pi}{2a}e^{-at} \tag{$t\ge 0$}
+    \end{equation*}
+    However, this is only valid for $t\ge 0$, as $S(t)$ is not differentiable at $t=0$. To handle the case $t<0$, we can use the fact that $S(t)$ is an even function of $t$ (or alternatively, use the values $S(0)=\frac{\pi}{2a}$ and $\lim_{t\to-\infty} S(t)=0$ to solve for $C_1$ and $C_2$). Thus, we have:
+    \begin{equation*}
+        S(t) = \frac{\pi}{2a}e^{-a\abs{t}}
+    \end{equation*}
+\end{example}
+
+\begin{example}
+    Define $f:[0,1]\times\R\to\R$ as follows:
+    \begin{equation*}
+        f(x,t) = \begin{cases}
+            \dfrac{xt^3}{\qty(x^2+t^2)^2} & (x,t)\ne(0,0) \\
+            0 & (x,t)=(0,0)
+        \end{cases}
+    \end{equation*}
+    Then for all $t\in\R$, we have $S(t)=\int_0^1 f(x,t)\dx=\frac{t}{2(t^2+1)}$. Thus $S'(t)=\frac{1-t^2}{2(t^2+1)^2}$, and so $S'(0)=\frac{1}{2}$. However,
+    \begin{align*}
+        \pdv{f}{t}(x,t) = \begin{cases}
+            \dfrac{xt^2\qty(3x^2-t^2)}{\qty(x^2+t^2)^3} & (x,t)\ne(0,0) \\
+            0 & (x,t)=(0,0)
+        \end{cases}
+        &&\therefore\quad
+        \int_0^1 \pdv{f}{t}\/(x,0)\dx=\int_0^1 0\dx=0
+    \end{align*}
+    The problem here is that $\pdv{f}{t}$ is not continuous (as a function of two variables) at $(0,0)$, as $\pdv{f}{t}\/(t,t)=\frac{1}{4t}$ (for $t\ne0$), which blows up as $t\to0^+$.
+    % https://mathoverflow.net/a/172898
+\end{example}
+
+\section{Other versions}
+
+The Leibniz integral rule can be reformulated using the Lebesgue integral:
+
+\begin{theorem}[Leibniz Integral Rule -- Lebesgue Integral]
+    Suppose $(X,\As,\mu)$ is a measure space, $I\sub\R$ is an open interval and $f:X\times I\to\R$ satisfies the following:
+    \begin{enumerate}
+        \item The function $x\mapsto f(x,t)$ is integrable for all $t\in I$
+        \item The function $f\mapsto f(x,t)$ is differentiable for all $x\in X$
+        \item There is an integrable function $g:X\to\R$ such that $\abs{\pdv{f}{t}\/(x,t)}\le g(x)$ for all $x\in X$ and all $t\in I$
+    \end{enumerate}
+    Then the function $x\mapsto\pdv{f}{t}(x,t)$ is integrable for all $t\in U$, and:
+    \begin{equation*}
+        \dv{t}\qty(\int_X f(x,t)\dmu(x)) = \int_X \pdv{f}{t}\/(x,t)\dmu(x)
+    \end{equation*}
+\end{theorem}
+\begin{proof}
+    Suppose $(h_n)_{n=1}^\infty$ is a sequence in $\R$ and $\limn h_n=0$. For each $n\in\N$, define $g_n:X\to\R$ as follows:
+    \begin{equation*}
+        g_n(x) = \frac{f(x,t+h_n)-f(x,t)}{h_n} - \pdv{f}{t}\/(x,t)
+    \end{equation*}
+    Then $\limn g_n(x)=0$ for all $x\in X$. By \href{https://en.wikipedia.org/wiki/Mean_value_theorem}{Lagrange's mean value theorem}, we have:
+    \begin{equation*}
+        \frac{f(x,t+h_n)-f(x,t)}{h_n} = \pdv{f}{t}(x,\tau_n) \text{ for some } \tau_n \text{ between } t \text{ and } t+h_n
+    \end{equation*}
+    Thus for all $n\in\N$ and all $x\in X$, we have:
+    \begin{equation*}
+        \abs{g_n(x)}
+        = \abs{\pdv{f}{t}(x,\tau_n) - \pdv{f}{t}\/(x,t)}
+        \le \abs{\pdv{f}{t}(x,\tau_n)} + {\pdv{f}{t}\/(x,t)}
+        \le g(x)+g(x)
+        =2g(x)
+    \end{equation*}
+    By the \href{https://en.wikipedia.org/wiki/Dominated_convergence_theorem}{dominated convergence theorem}, we have:
+    \begin{equation*}
+        \frac{1}{h_n}\int_X \qty(f(x,t+h_n)-f(x,t))\dmu(x) - \int_X \pdv{f}{t}\/(x,t)\dmu(x)
+        = \int_X g_n(x)\dmu(x)
+        \to 0 \text{ as } n\to\infty
+    \end{equation*}
+    As $n\to\infty$, the first integral tends to $\dv{t}\qty(\int_X f(x,t)\dmu(x))$. Since this holds for every sequence $(h_n)_{n=1}^\infty$ that converges to zero, we have:
+    \begin{equation*}
+        \dv{t}\qty(\int_X f(x,t)\dmu(x)) = \int_X \pdv{f}{t}\/(x,t)\dmu(x) \qedhere
+    \end{equation*}
+\end{proof}
+
+The Leibniz integral rule can also be adapted to the case where the limits are not constants but functions of $t$:
+
+\begin{theorem}[Leibniz Integral Rule -- Variable Limits]
+    Suppose $I\sub\R$ is an open interval, $a,b:I\to\R$ are differentiable on $I$ such that $a(t),b(t)\in[A,B]$ for all $t\in I$, and $f:[a,b]\times I\to\R$, $(x,t)\mapsto f(x,t)$ such that $f$ and $\pdv{f}{t}$ are continuous on $[A,B]\times I$. Define $S:I\to\R$ as follows:
+    \begin{equation*}
+        S(t)=\int_{a(t)}^{b(t)} f(x,t)\dx
+    \end{equation*}
+    Then $S$ is differentiable on $I$ and:
+    \begin{equation*}
+        S'(t)=b'(t)f(b(t),t)-a'(t)f(a(t),t)+\int_{a(t)}^{b(t)} \pdv{f}{t}\/(x,t)\dx
+    \end{equation*}
+\end{theorem}
+\begin{proof}
+    Define $G:[A,B]\times[A,B]\times I\to\R$ as follows:
+    \begin{equation*}
+        G(a,b,t)=\int_a^b f(x,t)\dx
+    \end{equation*}
+    In other words, $G$ is a function of three independent variables $a,b,t$. By the \href{https://en.wikipedia.org/wiki/Fundamental_theorem_of_calculus}{fundamental theorem of calculus}, we have:
+    \begin{align*}
+        \pdv{G(a,b,t)}{b}=f(b,t)
+        &&
+        \pdv{G(a,b,t)}{a}=-f(a,t)
+    \end{align*}
+    By \Cref{leibniz_integral_rule_riemann_integral}, we also have:
+    \begin{equation*}
+        \pdv{G(a,b,t)}{t}=\int_a^b \pdv{f}{t}\/(x,t)\dx
+    \end{equation*}
+    Thus, by the multivariable chain rule, we have:
+    \begin{align*}
+        \dv{t}G(a(t),b(t),t)
+        &= \dv{b(t)}{t}\pdv{G}{b}\/(a(t),b(t),t)+\dv{a(t)}{t}\pdv{G}{a}\/(a(t),b(t),t)+\dv{t}{t}\pdv{G(a,b,t)}{t} \\
+        &= b'(t)\pdv{G}{b}\/(a(t),b(t),t)+a'(t)\pdv{G}{a}\/(a(t),b(t),t)+\pdv{G}{t}\/(a(t),b(t),t) \\
+        &= b'(t)f(b(t),t)-a'(t)f(a(t),t)+\int_{a(t)}^{b(t)} \pdv{f}{t}\/(x,t)\dx
+    \end{align*}
+\end{proof}
+
+\begin{example}[Variant of {\hyperref[serret_integral]{Serret's integral}}]
+    \begin{equation*}
+        S(t) = \int_0^t \frac{\log(1+tx)}{1+x^2}\dx
+    \end{equation*}
+    Differentiating under the integral, we get:
+    \begin{align*}
+        S'(t)
+        &= \frac{\log(1+t^2)}{1+t^2} - 0 + \int_0^t \frac{x}{(1+tx)(1+x^2)}\dx \\
+        &= \frac{\log(1+t^2)}{1+t^2} - 0 - \frac{\log(1+t^2)}{1+t^2} + \frac{t\arctan(t)}{1+t^2} + \frac{\log(1+t^2)}{2(1+t^2)} \\
+        &= \frac{t\arctan(t)}{1+t^2} + \frac{\log(1+t^2)}{2(1+t^2)}
+    \end{align*}
+    Integrating the first term by parts yields:
+    \begin{equation*}
+        \int \frac{t\arctan(t)}{1+t^2}\dt
+        = \frac{\arctan(t)\log(1+t^2)}{2} - \int \frac{\log(1+t^2)}{2(1+t^2)}\dt
+    \end{equation*}
+    Thus the second term cancels out, and so:
+    \begin{equation*}
+        S(t)
+        = \frac{\arctan(t)\log(1+t^2)}{2} + C
+    \end{equation*}
+    Where $C$ is a constant. As with Serret's integral, the integrand vanishes when $t=0$, so $S(0)=0$ and so $C=0$. Thus:
+    \begin{equation*}
+        \int_0^t \frac{\log(1+tx)}{1+x^2}\dx
+        = \frac{\arctan(t)\log(1+t^2)}{2}
+    \end{equation*}
+\end{example}
+
+\begin{diagrambox}{The Leibniz Integral Rule (Variable Limits)}
+    \pgfplotsset{colormap={Greenwave}{HTML=(11998E) HTML=(38EF7D)}}
+    \pgfmathdeclarefunction{f}{2}{%
+        \pgfmathparse{1+2*(#1/4)^2+2/3*(#2/2)^2-(#1/4)^4-4/3*(#2/4)^4+8*(#1/8)^6+32/3*(#2/8)^6}
+    } % Use https://www.math3d.org to fine-tune the function for visual aid
+    \pgfmathdeclarefunction{a}{1}{\pgfmathparse{1-(#1)/4+(#1)^2/8-(#1)^3/96}}
+    \pgfmathdeclarefunction{b}{1}{\pgfmathparse{5-(#1)/2+(#1)^2/4-(#1)^3/48}}
+    \pgfmathsetmacro{\ti}{3}
+    \pgfmathsetmacro{\tf}{5}
+    \colorlet{f_color}{Bittersweet}
+    \colorlet{a_color}{Rhodamine}
+    \colorlet{b_color}{MidnightBlue}
+    
+    \begin{equation*}
+        \tcbhighmath[
+            colback=white, colframe=black, sharp corners,
+        ]{
+            \dv{t}(\int_{a(t)}^{b(t)} f(x,t)\dx)
+            = \textcolor{b_color}{b'(t)f(b(t),t)}
+            - \textcolor{a_color}{a'(t)f(a(t),t)}
+            + \textcolor{f_color}{\int_{a(t)}^{b(t)} \pdv{f}{t}\/(x,t)\dx}
+        }
+    \end{equation*}
+    \begin{tikzpicture}
+        \begin{axis}[view={120}{30},
+            scale=2,
+            unit vector ratio={1 1 1}, % Uniform scaling of axes
+            axis lines=center, % Render axis lines properly
+            xlabel={$t$}, ylabel={$x$}, zlabel={$f$}, % axis labels
+            x label style=left, y label style=right, z label style=right, % Positions of axis labels
+            xtick=\empty, ytick=\empty, ztick=\empty, % No markings on axes
+            xmin=0, xmax=8, ymin=0, ymax=8, zmin=0, zmax=6, % Axis ranges
+            clip=false % No clipping of picture by axis ranges
+        ]
+            \begin{scope}[canvas is xy plane at z=0]
+                \fill[gray, opacity=0.1] (0,0) rectangle (8,8);
+            \end{scope}
+            
+            % Surface f(x,t)
+            \addplot3[domain=0:8, y domain=0:8, samples=51, colormap name=Greenwave, surf, shader=interp, opacity=0.4]{f(x,y)};
+            \node at (0,7.6,2) {$f(x,t)$}; %Position chosen artificially for visual aid
+
+            % Lower and upper limit curves a(t) and b(t)
+            \addplot3+[no markers, very thick, a_color, samples=51, samples y=0, domain=0:8, variable=\t] ({\t},{a(\t)},0) node[below]{$a(t)$};
+            \addplot3+[no markers, very thick, b_color, samples=51, samples y=0, domain=0:8, variable=\t] ({\t},{b(\t)},0) node[below]{$b(t)$};
+
+            \begin{scope}[canvas is yz plane at x={\ti}]
+                \fill[f_color!60, opacity=0.4, domain={a(\ti)}:{b(\ti)}, variable=\x] ({a(\ti)},0) -- plot ({\x},{f(\x,\ti)}) -- ({b(\ti)},0) -- cycle;
+                \draw[thin, smooth, dashed, domain=0:8, samples=51, variable=\x] plot({\x},{f(\x,\ti)});
+                \draw[thick, a_color] ({a(\ti)},0) -- ({a(\ti)},{f(a(\ti),\ti)});
+                \draw[thick, b_color] ({b(\ti)},0) -- ({b(\ti)},{f(b(\ti),\ti)});
+                \draw[ultra thick, smooth, f_color, domain={a(\ti)}:{b(\ti)}, samples=51, variable=\x] plot({\x},{f(\x,\ti)});
+                \draw[thin] (0,0) rectangle (8,6);
+                \node[right] at (8,0) {$t_0$};
+            \end{scope}
+
+            \begin{scope}[canvas is yz plane at x={\tf}]
+                \fill[f_color!60, opacity=0.4, domain={a(\tf)}:{b(\tf)}, variable=\x] ({a(\tf)},0) -- plot ({\x},{f(\x,\tf)}) -- ({b(\tf)},0) -- cycle;
+                \draw[thin, smooth, dashed, domain=0:8, samples=51, variable=\x] plot({\x},{f(\x,\tf)});
+                \draw[thick, a_color] ({a(\tf)},0) -- ({a(\tf)},{f(a(\tf),\tf)});
+                \draw[thick, b_color] ({b(\tf)},0) -- ({b(\tf)},{f(b(\tf),\tf)});
+                \draw[ultra thick, smooth, f_color, domain={a(\tf)}:{b(\tf)}, samples=51, variable=\x] plot({\x},{f(\x,\tf)});
+                \draw[thin] (0,0) rectangle (8,6);
+                \node[right] at (8,0) {$t_1$};
+            \end{scope}
+            % Arrow depicting shift from t0 to t1
+            \draw[ultra thick, -latex] ({\ti+0.2},8.2,0) -- ({\tf-0.4},8.2,0);
+        \end{axis}
+    \end{tikzpicture}
+
+    \begin{tikzpicture}
+        \draw[-latex] (0,0) -- (8,0) node[right]{$x$};
+        \draw[-latex] (0,0) -- (0,6) node[left]{$f$};
+        
+        % Filled area under the curves f(x,t0) and f(x,t1)
+        \fill[f_color!60, opacity=0.4, domain={a(\ti)}:{b(\ti)}, variable=\x] ({a(\ti)},0) -- plot ({\x},{f(\x,\ti)}) -- ({b(\ti)},0) -- cycle;
+        \fill[f_color!60, opacity=0.4, domain={a(\tf)}:{b(\tf)}, variable=\x] ({a(\tf)},0) -- plot ({\x},{f(\x,\tf)}) -- ({b(\tf)},0) -- cycle;
+        
+        % Dashed curves f(x,t0) and f(x,t1) over the whole domain
+        \draw[thin, smooth, dashed, domain=0:8, samples=51, variable=\x] plot({\x},{f(\x,\ti)}) node[right]{$f(x,t_0)$};
+        \draw[thin, smooth, dashed, domain=0:8, samples=51, variable=\x] plot({\x},{f(\x,\tf)}) node[right]{$f(x,t_1)$};
+        
+        % Vertical boundary lines at a(t0), a(t1), b(t0), b(t1)
+        \draw[thick, a_color] ({a(\ti)},{f(a(\ti),\ti)}) -- ({a(\ti)},0) node[below, xshift=-5pt]{$a(t_0)$};
+        \draw[thick, a_color] ({a(\tf)},{f(a(\tf),\tf)}) -- ({a(\tf)},0) node[below, xshift=5pt]{$a(t_1)$};
+        \draw[thick, b_color] ({b(\ti)},{f(b(\ti),\ti)}) -- ({b(\ti)},0) node[below]{$b(t_0)$};
+        \draw[thick, b_color] ({b(\tf)},{f(b(\tf),\tf)}) -- ({b(\tf)},0) node[below]{$b(t_1)$};
+        
+        % Curves f(x,t0) and f(x,t1)
+        \draw[ultra thick, smooth, f_color, domain={a(\ti)}:{b(\ti)}, samples=51, variable=\x] plot({\x},{f(\x,\ti)});
+        \draw[ultra thick, smooth, f_color, domain={a(\tf)}:{b(\tf)}, samples=51, variable=\x] plot({\x},{f(\x,\tf)});
+        
+        % Shaded diagonal lines
+        \path[pattern=north east lines, pattern color=a_color, domain={a(\ti)}:{a(\tf)}, variable=\x] ({a(\ti)},0) -- plot ({\x},{f(\x,\ti)}) -- ({a(\tf)},0) -- cycle;
+        \path[pattern=north east lines, pattern color=b_color, domain={b(\ti)}:{b(\tf)}, variable=\x] ({b(\ti)},0) -- plot ({\x},{f(\x,\ti)}) -- ({b(\tf)},0) -- cycle;
+        \path[pattern=north west lines, pattern color=f_color] ({a(\tf)},{f(a(\tf),\tf)}) -- plot[domain={a(\tf)}:{b(\tf)}, variable=\x] ({\x},{f(\x,\tf)}) -- ({b(\tf)},{f(b(\tf),\tf)}) -- plot[domain={b(\tf)}:{a(\tf)}, variable=\x] ({\x},{f(\x,\ti)}) -- cycle;
+
+        % Legend explaining the shaded areas
+        \begin{scope}[shift={(2,5)}]
+            \draw[thick, draw=f_color, pattern=north west lines, pattern color=f_color] (0,0.5) circle (0.2) node[right, xshift=2mm]{%
+                Change due to $f(x,t)$
+            };
+            \draw[thick, draw=a_color, pattern=north east lines, pattern color=a_color] (0,0) circle (0.2) node[right, xshift=2mm]{%
+                Change due to $a(t)$
+            };
+            \draw[thick, draw=b_color, pattern=north east lines, pattern color=b_color] (0,-0.5) circle (0.2) node[right, xshift=2mm]{%
+                Change due to $b(t)$
+            };
+        \end{scope}
+    \end{tikzpicture}
+\end{diagrambox}
+
+We now use the Leibniz integral rule to prove the \href{https://mathworld.wolfram.com/FundamentalTheoremofAlgebra.html}{fundamental theorem of algebra}:
+
+\begin{theorem}[Fundamental Theorem of Algebra]
+    Every polynomial $p:\C\to\C$ has at least one root.
+\end{theorem}
+\begin{proof}
+    Suppose $p(z)\ne 0$ for all $z\in\C$. Define $I:[0,\infty)\to\C$ as follows:
+    \begin{equation*}
+        I(r) = \int_0^{2\pi} \frac{1}{p(re^{i\theta})}\dtheta
+    \end{equation*}
+    This is well-defined as $p(z)$ is never zero, so $\frac{1}{p(z)}$ is continuous on $\C$.\\
+
+    We first show that $\lim_{r\to 0^+} I(r)=I(0)$, i.e. $I$ is continuous at $0$. Since $\frac{1}{p(z)}$ is continuous at $0$, for any $\ep>0$, there exists $\delta>0$ such that $\abs{\frac{1}{p(z)}-\frac{1}{p(0)}}<\frac{\ep}{2\pi}$ for all $z\in\C$, $\abs{z}<\delta$. Thus for all $0\le r<\delta$, we have:
+    \begin{equation*}
+        \abs{I(r)-I(0)}
+        = \abs{\int_0^{2\pi} \qty(\frac{1}{p(re^{i\theta})}-\frac{1}{p(0)})\dtheta}
+        \le \int_0^{2\pi} \abs{\frac{1}{p(re^{i\theta})}-\frac{1}{p(0)}}\dtheta
+        < \int_0^{2\pi} \frac{\ep}{2\pi}\dtheta
+        = \ep
+    \end{equation*}
+    Thus $\lim_{r\to 0^+} I(r)=I(0)$.\\
+
+    We now show that $\lim_{r\to\infty} I(r)=0$. Suppose the leading (highest-degree) term of $p(z)$ is $az^d$. Then we have $\lim_{r\to\infty} \frac{\abs{p(re^{i\theta)}}}{\abs{re^{i\theta}}^d}=\abs{a}$, so there exists $R>0$ such that $\abs{p(z)}>\frac{\abs{a}}{2}r^d$ for all $r>R$. Thus for all $r>R$, we have:
+    \begin{equation*}
+        \abs{I(r)}
+        \le \int_0^{2\pi} \frac{1}{\abs{p(re^{i\theta})}}\dtheta
+        \le \int_0^{2\pi} \frac{2}{\abs{a}r^d}\dtheta
+        = \frac{4\pi}{\abs{a}r^d}
+    \end{equation*}
+    Since the right side tends to zero as $r\to\infty$, we have $\lim_{r\to\infty} I(r)=0$.\\
+
+    Note that:
+    \begin{equation*}
+        \pdv{\theta}(\frac{1}{p(re^{i\theta})})
+        = -ire^{i\theta}\frac{p'(re^{i\theta})}{p(re^{i\theta})^2}
+        = ir\pdv{r}(\frac{1}{p(re^{i\theta})})
+    \end{equation*}
+    Thus, differentiating under the integral, we get:
+    \begin{equation*}
+        I'(r)
+        = \int_0^{2\pi} \pdv{r}(\frac{1}{p(re^{i\theta})})\dtheta
+        = \int_0^{2\pi} \frac{1}{ir}\pdv{\theta}(\frac{1}{p(re^{i\theta})})\dtheta
+        = \frac{1}{ir}\qty(\frac{1}{p(re^{i\theta})})_{\theta=0}^{\theta=2\pi}
+        = \frac{1}{ir}\qty(\frac{1}{p(r)}-\frac{1}{p(r)})
+        = 0
+    \end{equation*}
+    Thus $I$ is constant on $[0,\infty)$. This is a contradiction, as $\lim_{r\to\infty} I(r)=0$ but $\lim_{r\to 0^+} I(r)=\frac{2\pi}{p(0)}\ne 0$. Thus $p$ must have at least one root, i.e. $p(z)=0$ for some $z\in\C$.
+    % https://kconrad.math.uconn.edu/blurbs/analysis/diffunderint.pdf
+\end{proof}
+
+\end{document}
