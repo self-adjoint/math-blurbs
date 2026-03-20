@@ -29,7 +29,9 @@ jobs:
       - name: Compile LaTeX
         uses: xu-cheng/latex-action@v3
         with:
-          root_file: main.tex
+          root_file: |
+            main.tex
+            Integration/Leibniz_Integral_Rule.tex
           extra_system_packages: tzdata
         env:
           TZ: America/Los_Angeles
@@ -40,7 +42,7 @@ jobs:
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git checkout --orphan pdf-tmp
           git reset
-          git add main.pdf
+          git add main.pdf Integration/Leibniz_Integral_Rule.tex
           git commit -m "Update PDF"
           git push origin pdf-tmp:pdf --force
 
