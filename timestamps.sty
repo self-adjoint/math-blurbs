@@ -36,3 +36,14 @@
     \DTMsetdatestyle{newdate}
     \DTMsetzonestyle{newzone}
 }
+
+\newcommand{\VersionTimestamp}{
+    \tcbox[
+        colback=Aquamarine!10, colframe=Aquamarine,
+        center,
+        size=small,
+        fontupper=\large\sffamily,
+        enhanced, drop fuzzy shadow,
+        beforeafter skip=5mm,
+    ]{Version of \DTMToday, \DTMcurrenttime \ (\DTMcurrentzone)}
+}

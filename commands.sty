@@ -16,12 +16,6 @@
 % Shortcuts for blackboard bold letters, e.g. \A outputs \mathbb{A}
 \def\do#1{\csdef{#1}{\mathbb{#1}}}
 \docsvlist{A,B,D,G,I,J,M,T,U,V,W,X,Y}
-% \E is manually defined as the expected value operator (expectation)
-% \H is already defined as a 1-argument command, it places a double acute accent (hungarumlaut) on a character, e.g. \H{o} yields ő
-% \L is already defined as the uppercase Ł (L with stroke)
-% \O is already defined as the uppercase Ø (O with stroke)
-% \P is already defined as the pilcrow ¶ (paragraph mark)
-% \S is already defined as the section sign §
 
 % Shortcuts for calligraphic letters, e.g. \As outputs \mathcal{A}
 \def\do#1{\csdef{#1s}{\mathcal{#1}}}
@@ -128,3 +122,6 @@
 % Set-builder notation {a|b} with auto-sizing brackets
 \newcommand*{\setbuild}[2]{\left\{#1\,\middle|\,#2\right\}}
 \newcommand*{\bsetbuild}[2]{\left[#1\,\middle|\,#2\right]}
+
+% \fsize stores the current font size but is expandable (and can be called later without using \makeatletter and \makeatother)
+\def\fsize{\dimexpr\f@size pt\relax}
