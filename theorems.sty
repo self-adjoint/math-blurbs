@@ -8,7 +8,7 @@
 \makeatletter
 \renewenvironment{proof}[1][\proofname] {\par\pushQED{\qed}{\normalfont\sffamily\bfseries\topsep6\p@\@plus6\p@\relax #1\@addpunct{.} }}{\popQED\endtrivlist\@endpefalse}
 \makeatother
-\renewcommand{\qedsymbol}{$\blacksquare$} % Implements the new QED symbol
+\renewcommand{\qedsymbol}{\coolqed{0.32}} % Implements the new QED symbol
 \theoremstyle{mytheoremstyle}{\newtheorem{definition}{Definition}[section]}
 \theoremstyle{mytheoremstyle}{\newtheorem{proposition}[definition]{Proposition}}
 \theoremstyle{mytheoremstyle}{\newtheorem{theorem}[definition]{Theorem}}
@@ -76,6 +76,8 @@
         \draw[-,line width={#1*0.8mm},red,fill=yellow,rounded corners={#1*2.5mm}] (0,0)--(1,{-sqrt(3)})--(-1,{-sqrt(3)})--cycle;
         \node at (0,-1) {\fontsize{48}{60}\selectfont\bfseries!};
 }}
+
+\newcommand{\coolqed}[1]{\includegraphics[width=#1cm]{Images/sunglasses_emoji.png}} % QED symbol
 
 % LaTeX hooks to override cleveref patches to ensure definitions, propositions, etc are rendered correctly in cross-references
 % e.g. to avoid citing Proposition 1.2 as "Definition 1.2"
