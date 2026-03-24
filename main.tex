@@ -115,13 +115,38 @@ The QED symbol I have chosen to use is the \href{https://emojipedia.org/smiling-
 
 Some text after the introduction.
 $1+1=2$
+
+\begin{theorem}
+    For any group of people, there are at least two people with the same number of friends.
+\end{theorem}
+
+\begin{theorem}
+    For every positive integer $n$, $\binom{2n}{n}$ is even.
+\end{theorem}
 \begin{proof}
-    fr
+    $\binom{2n}{n}=\binom{2n-1}{n-1}+\binom{2n-1}{n}=2\binom{2n-1}{n-1}$
 \end{proof}
 
-\[1+1=2\]
+\begin{align*}
+    \int \sqrt{1-x^2}\dx
+    = \int \sqrt{1-\sin(t)^2}\cos(t)\dt
+    = \int \cos(t)^2\dt
+    = \int \qty(\frac{\cos(2t)}{2}+\frac{1}{2})\dt
+    = \frac{\sin(2t)}{4} + \frac{t}{2} + C
+    = \frac{\sin(t)\cos(t)}{2} + \frac{t}{2} + C
+    = \frac{x\sqrt{1-x^2}}{2} + \frac{\asin(x)}{2} + C
+\end{align*}
 
-$$1+1=2$$
+\begin{align*}
+    \int_0^1 \sqrt{1-x^2}\dx
+    &= \int_0^1 \sqrt{1-\sin(t)^2}\cos(t)\dt \\
+    &= \int_0^{\tfrac{\pi}{2}} \cos(t)^2\dt \\
+    &= \int_0^{\tfrac{\pi}{2}} \qty(\frac{1+\cos(2t)}{2})\dt \\
+    &= \int_0^{\tfrac{\pi}{2}} \qty(\frac{1+\cos(2t)}{2})\dt \\
+\end{align*}
+
+
+
 
 \begin{python}[Default \texttt{minted} options: \texttt{autogobble}, \texttt{breaklines}, \texttt{mathescape}]
     from collections.abc import Iterator

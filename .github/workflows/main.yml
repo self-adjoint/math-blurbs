@@ -34,7 +34,7 @@ jobs:
             Integration/Leibniz_Integral_Rule.tex
           extra_system_packages: tzdata
         env:
-          TZ: America/Los_Angeles
+          TZ: Europe/London
 
       - name: Deploy PDF to pdf branch
         run: |
