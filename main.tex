@@ -49,6 +49,7 @@
 
 % Local packages to be loaded %
 \usepackage{commands}
+\usepackage{exercise_format}
 \usepackage{labeled_boxes}
 \usepackage{matrices}
 \usepackage{python_boxes}
@@ -80,6 +81,8 @@
 \renewcommand{\footrulewidth}{0pt}
 \fancyfoot[C]{\sffamily\thepage}}
 
+\setcounter{section}{-1}
+
 \makeatletter
 % Redefining the title block
 \renewcommand{\maketitle}{%
@@ -109,41 +112,19 @@ This project is hosted on GitHub: \url{https://github.com/self-adjoint/math-blur
 
 \subsection{The QED Symbol}
 
-\href{https://mathworld.wolfram.com/QED.html}{QED} stands for \emph{quod erat demonstrandum} (Latin for ``that which was to be demonstrated''), and is used to signify the end of a mathematical proof. Most mathematicians use either a white square $\square$ or a black square $\blacksquare$ for this. \href{https://news.uchicago.edu/story/paul-j-sally-jr-influential-mathematician-and-educator-1933-2013}{Paul J., Sally, Jr.} (1933 -- 2013) famously used a sketch of himself in an eyepatch\footnote{He was legally blind in his left eye, and nicknamed ``The Math Pirate'' and ``Professor Pirate'' by his students.} as the QED symbol in his books.\\
-
-The QED symbol I have chosen to use is the \href{https://emojipedia.org/smiling-face-with-sunglasses}{Smiling Face with Sunglasses} emoji\footnote{Not to be confused with an \href{https://www.britannica.com/story/whats-the-difference-between-emoji-and-emoticons}{emoticon}, which refers to things like :) and :( and were mainly used before emojis were introduced into \href{https://emojipedia.org/unicode-6.0}{Unicode 6.0}.}. This version is used by \href{https://www.whatsapp.com/}{WhatsApp}
-
-Some text after the introduction.
-$1+1=2$
+\href{https://mathworld.wolfram.com/QED.html}{QED} stands for \emph{quod erat demonstrandum} (Latin for ``that which was to be demonstrated''), and is used to signify the end of a mathematical proof. Most mathematicians use either a white square $\square$ or a black square $\blacksquare$ for this. \href{https://news.uchicago.edu/story/paul-j-sally-jr-influential-mathematician-and-educator-1933-2013}{Paul J., Sally, Jr.} (1933 -- 2013) famously used a sketch of himself in an eyepatch\footnote{He was legally blind in his left eye, and nicknamed ``The Math Pirate'' and ``Professor Pirate'' by his students.} as the QED symbol in his books.
 
 \begin{theorem}
     For any group of people, there are at least two people with the same number of friends.
 \end{theorem}
-
-\begin{theorem}
-    For every positive integer $n$, $\binom{2n}{n}$ is even.
-\end{theorem}
 \begin{proof}
-    $\binom{2n}{n}=\binom{2n-1}{n-1}+\binom{2n-1}{n}=2\binom{2n-1}{n-1}$
+    Suppose there are $n$ people in the group. Each person can have any number of friends from $0$ to $n-1$ (so there are $n$ possible values). However, there cannot be both a person with $0$ friends (friends with no one) and a person with $n-1$ friends (friends with everyone). Thus, there must be at least two people with the same number of friends.
 \end{proof}
 
-\begin{align*}
-    \int \sqrt{1-x^2}\dx
-    = \int \sqrt{1-\sin(t)^2}\cos(t)\dt
-    = \int \cos(t)^2\dt
-    = \int \qty(\frac{\cos(2t)}{2}+\frac{1}{2})\dt
-    = \frac{\sin(2t)}{4} + \frac{t}{2} + C
-    = \frac{\sin(t)\cos(t)}{2} + \frac{t}{2} + C
-    = \frac{x\sqrt{1-x^2}}{2} + \frac{\asin(x)}{2} + C
-\end{align*}
+The QED symbol I have chosen to use is the \href{https://emojipedia.org/smiling-face-with-sunglasses}{Smiling Face with Sunglasses} emoji\footnote{Not to be confused with an \href{https://www.britannica.com/story/whats-the-difference-between-emoji-and-emoticons}{emoticon}, which refers to things like :) and :( and were mainly used before emojis were introduced into \href{https://emojipedia.org/unicode-6.0}{Unicode 6.0}.}. This version has been used by \href{https://www.whatsapp.com/}{WhatsApp} since 2017.
 
-\begin{align*}
-    \int_0^1 \sqrt{1-x^2}\dx
-    &= \int_0^1 \sqrt{1-\sin(t)^2}\cos(t)\dt \\
-    &= \int_0^{\tfrac{\pi}{2}} \cos(t)^2\dt \\
-    &= \int_0^{\tfrac{\pi}{2}} \qty(\frac{1+\cos(2t)}{2})\dt \\
-    &= \int_0^{\tfrac{\pi}{2}} \qty(\frac{1+\cos(2t)}{2})\dt \\
-\end{align*}
+
+
 
 
 
@@ -176,6 +157,11 @@ $1+1=2$
 \begin{flagbox}{title}
     some text
 \end{flagbox}
+
+\DeclareDocumentCommand{\NOT}{}{\textcolor{red}{\textbf{NOT}}\xspace}
+
+This is \NOT the same. Oh, but \NOT. This is \NOT* the same. Oh, but \NOT*.
+
 
 
 

@@ -1,0 +1,261 @@
+% File created as 'exercise_format.sty' August 28, 2023
+
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{exercise_format}[2023/08/28 Exercise Formats]
+
+\RequirePackage{tcolorbox}
+\tcbuselibrary{skins} % required for advanced box styles e.g. enhanced (this library also loads TikZ)
+\tcbuselibrary{breakable} % required for breakable boxes
+
+\RequirePackage{xparse}
+\RequirePackage[use-files]{xsim}
+\RequirePackage{fmtcount}
+
+% Repeat character (or string) n times: \replicate[3]{abc} repeats the string 'abc' 3 times. Default is 2 times. Adapted from https://tex.stackexchange.com/a/272741
+\makeatletter
+\newcommand*{\replicate}[2][2]{\begingroup
+\ifnum#1=0\do{} %If first argument is less than 1, print nothing
+\else\count@=#1\@whilenum\count@>0\do{#2\advance\count@\m@ne} % If first argument is at least 1, print second argument that many times
+\fi\endgroup}
+\makeatother
+
+% \newcounter{exercise}[section]
+
+\tcbset{ % tcolorbox style to add star(s) in a question box
+    star/.style={after title={\hfill\replicate[#1]{$\star$}}}
+}
+
+
+
+% Defining boolean variables to handle different solution-printing configurations (no solutions, solutions in-place only, solutions at the end only, solutions in-place and at the end)
+\newif\ifPrintSolutionsInPlace
+\newif\ifPrintSolutionsAtEnd
+\newif\ifCallToPrintSolutions
+
+\CallToPrintSolutionsfalse  % This MUST (initially) be set to false, it will be automatically switched to true at the end if necessary, i.e. if solutions are to be printed there
+
+%%% PACKAGE OPTIONS FOR DIFFERENT SOLUTION-PRINTING CONFIGURATIONS %%%
+% inplace: Solutions printed in-place only
+% atend: Solutions printed at the end only
+% both: Solutions printed in-place and at the end
+% none: No solutions printed
+\DeclareOption{inplace}{\PrintSolutionsInPlacetrue}
+\DeclareOption{atend}{\PrintSolutionsAtEndtrue}
+\DeclareOption{both}{\PrintSolutionsInPlacetrue\PrintSolutionsAtEndtrue}
+\DeclareOption{none}{}
+\ProcessOptions\relax
+
+
+
+% Command that prints where solutions are located
+\newcommand{\WhereSolutions}{
+\ifPrintSolutionsInPlace
+    \ifPrintSolutionsAtEnd
+        Solutions in-place and at the end%
+    \else
+        Solutions in-place%
+    \fi
+\else
+    \ifPrintSolutionsAtEnd
+        Solutions at the end%
+    \else
+        No solutions%
+    \fi
+\fi}
+
+\definecolor{tcol_EXERCISE}{HTML}{2A35C0} % Color for exercise boxes
+\definecolor{tcol_SOLUTION}{HTML}{8E11B8} % Color for solution boxes
+\definecolor{tcol_EXERCISE_HYPERLINK}{HTML}{610B05} % Color for hyperlinks on exercises (which cross-reference to solutions)
+\definecolor{tcol_SOLUTION_HYPERLINK}{HTML}{08571A} % Color for hyperlinks on solutions (which cross-reference to exercises)
+\definecolor{tcol_EXTENSION}{HTML}{08285C} % Color for extensions
+\definecolor{tcol_REMARK}{HTML}{0B6E20} % Color for remarks
+
+\xsimsetup{
+    % exercise/the-counter=\thechapter.\thesection.\arabic{exercise}, % Include chapter and section in exercise numbers, e.g. 1.2.1, 1.2.2, 1.2.3
+    exercise/within=chapter, % Number exercises within chapter
+}
+
+\ifPrintSolutionsInPlace
+    \xsimsetup{solution/print=true}
+\else
+    \xsimsetup{solution/print=false}
+\fi
+
+\DeclareExerciseProperty{title}
+% Declare a boolean property:
+% \DeclareExerciseProperty*{short}
+% Declare a tag-like property:
+% \DeclareExerciseTagging{level}
+\DeclareExerciseProperty{star}
+
+% tcolorbox format for exercise boxes
+\NewTColorBox{exercise_box}{ O{} }{
+    enhanced jigsaw,
+    % boxrule=0pt,boxsep=0pt,
+    colback=tcol_EXERCISE!10,
+    colframe=tcol_EXERCISE!40,
+    before title={
+    \begingroup
+    \sffamily\selectfont
+        \ifPrintSolutionsAtEnd
+            % If solutions are to be printed at the end, print the exercise number, hyperlinked to the solution
+            \hyperref[solution_identifier:\ExerciseID]{{\color{tcol_EXERCISE_HYPERLINK}\bfseries\GetExerciseProperty{counter}}}%
+            \GetExercisePropertyT{title}{~~\PropertyValue}% Print the title, if any
+        \else
+            % Otherwise, print the exercise number with no hyperlink
+            {\bfseries\GetExerciseProperty{counter}}%
+            \GetExercisePropertyT{title}{~~\PropertyValue}% Print the title, if any
+        \fi
+    \endgroup
+    },
+    title=\null,
+    coltitle=black,
+    after title={\hfill\GetExercisePropertyT{star}{\replicate[\PropertyValue]{$\star$}}},
+    fonttitle=\sffamily,
+    label={exercise_identifier:\ExerciseID}, % Label the exercise (Note: \ExerciseID is a single number, i.e. 1,2,3, etc, NOT 1.1.1, 1.1.2, etc)
+    sharp corners,
+    top=2pt,bottom=2pt,left=2pt,right=2pt,
+    beforeafter skip=10pt,
+    drop fuzzy shadow,
+    breakable,
+    #1,
+}
+
+% Overall template for the exercises
+\DeclareExerciseEnvironmentTemplate{exercise}
+{% Code before exercise
+    % \renewcommand*\theenumi{\theexercise.\arabic{enumi}} %To show the exercise number in enumerate lists (e.g. 4.1,4.2,4.3 instead of 1,2,3)
+    % To print "Exercise" (or whatever the name of the environment is), type \XSIMmixedcase{\GetExerciseName}~
+    \begin{exercise_box}
+}
+{% Code after exercise
+    \end{exercise_box}
+}
+
+% tcolorbox format for solution boxes
+\NewTColorBox{solution_box}{ m O{} }{
+    enhanced jigsaw,
+    interior hidden,frame hidden,
+    borderline west={1pt}{0pt}{#1},
+    title={
+        \ifCallToPrintSolutions
+                % If solutions are to be printed at the end AND we are at the end, print the solution number, hyperlinked to the exercise
+                \hyperref[exercise_identifier:\ExerciseID]{Solution~\GetExerciseProperty{counter}}%
+            \else
+                % Otherwise, print the solution number with no hyperlink
+                Solution%
+            \fi
+    },
+    fonttitle=\sffamily\bfseries\selectfont,
+    coltitle={
+        \ifCallToPrintSolutions tcol_SOLUTION_HYPERLINK\else black\fi
+    },
+    attach boxed title to top left={yshift=-8pt,yshifttext=-8pt},
+    boxed title style={
+        boxrule=1pt,boxsep=2pt,
+        colback=#1!10,
+        colframe=#1,
+        sharp corners,
+        left=4pt,right=4pt
+    },
+    sharp corners,
+    top=2pt,bottom=2pt,left=2pt,right=2pt,
+    beforeafter skip=10pt,
+    breakable,
+    #2,
+}
+
+% Overall template for the solutions
+\DeclareExerciseEnvironmentTemplate{solution}
+{% Code before exercise
+    % \renewcommand*\theenumi{\theexercise.\arabic{enumi}} %To show the exercise number in enumerate lists (e.g. 4.1,4.2,4.3 instead of 1,2,3)
+    \setcounter{solutionnumber}{1} % Set the value of solutionnumber to 1. Since solutionnumber resets with every solution, this is equivalent to \stepcounter{solutionnumber}
+    \begin{solution_box}{tcol_SOLUTION}[%
+        label={
+            \ifCallToPrintSolutions
+                solution_identifier:\ExerciseID         % If we are at the end
+            \else
+                inplace_solution_identifier:\ExerciseID % If we are not at the end
+            \fi
+        },
+    ]
+}
+{% Code after exercise
+    \end{solution_box}
+}
+
+% Counter for solution number
+% This is for multiple solutions to the SAME exercise, NOT solutions to different exercises!
+\newcounter{solutionnumber}[solution]
+
+% Command to move to the next solution
+% This ends the current tcolorbox and begins a new one (but it does NOT end the solution environment)!
+\newcommand{\NextSolution}{
+    \end{solution_box}
+    \stepcounter{solutionnumber}
+    \begin{solution_box}{tcol_SOLUTION}[% Override the original solution_box options as we are in a subsequent solution
+        title={\Ordinalstringnum{\thesolutionnumber}~solution},
+        coltitle=black,
+        attach boxed title to top left={yshift=-14pt,yshifttext=-14pt},
+        boxed title style={
+            interior hidden,frame hidden,
+        },
+    ]
+}
+
+\newcommand{\Extension}{
+    \end{solution_box} % No need for \stepcounter as this is not a subsequent solution
+    \begin{solution_box}{tcol_EXTENSION}[
+        title={Extension},
+        fonttitle=\sffamily\bfseries\itshape\selectfont,
+        coltitle=tcol_EXTENSION,
+        attach boxed title to top left={yshift=-14pt,yshifttext=-14pt},
+        boxed title style={
+            interior hidden,frame hidden,
+        },
+    ]
+}
+
+\newcommand{\Remark}{
+    \end{solution_box} % No need for \stepcounter as this is not a subsequent solution
+    \begin{solution_box}{tcol_REMARK}[
+        title={Remark},
+        coltitle=tcol_REMARK,
+        attach boxed title to top left={yshift=-14pt,yshifttext=-14pt},
+        boxed title style={
+            interior hidden,frame hidden,
+        },
+    ]
+}
+
+\crefformat{exercise}{\normalfont\bfseries\color{tcol_EXERCISE_HYPERLINK} #2exercise #1#3}
+\crefrangeformat{exercise}{\normalfont\bfseries\color{tcol_EXERCISE_HYPERLINK} #3exercises #1#4 {\normalfont\color{black}and} #5#2#6}
+\Crefformat{exercise}{\normalfont\bfseries\color{tcol_EXERCISE_HYPERLINK} #2Exercise #1#3}
+\Crefrangeformat{exercise}{\normalfont\bfseries\color{tcol_EXERCISE_HYPERLINK} #3Exercises #1#4 {\normalfont\color{black}and} #5#2#6}
+
+\crefformat{solution}{\normalfont\bfseries\color{tcol_SOLUTION_HYPERLINK} #2solution #1#3}
+\crefrangeformat{solution}{\normalfont\bfseries\color{tcol_SOLUTION_HYPERLINK} #3solutions #1#4 {\normalfont\color{black}and} #5#2#6}
+\Crefformat{solution}{\normalfont\bfseries\color{tcol_SOLUTION_HYPERLINK} #2Solution #1#3}
+\Crefrangeformat{solution}{\normalfont\bfseries\color{tcol_SOLUTION_HYPERLINK} #3Solutions #1#4 {\normalfont\color{black}and} #5#2#6}
+
+% Custom \printsolutions command that prints the chapter headings before the exercises of each chapter
+% Adapted from https://tex.stackexchange.com/a/577008
+\renewcommand\printsolutions{
+    \def\currentchapter{}
+    \def\lastchapter{}
+    \def\subsectionbreak{\clearpage} % Start every subsection on a new page
+    \ForEachUsedExerciseByType{
+        \let\lastchapter\currentchapter
+        \edef\currentchapter{\ExercisePropertyGet{##1}{##2}{chapter-value}}
+        \ifx\lastchapter\currentchapter\else
+            \subsection*{Exercises \ExercisePropertyGet{##1}{##2}{chapter}}
+        \fi
+        \XSIMprint{solution}{##1}{##2}
+    }
+}
+
+% setup exercises and solutions:
+\SetExerciseParameters{exercise}{
+    exercise-template=exercise,
+    solution-template=solution
+}
