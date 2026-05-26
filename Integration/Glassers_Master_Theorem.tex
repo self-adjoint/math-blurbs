@@ -27,9 +27,19 @@
     \end{enumerate}
 \end{examples}
 
+\begin{tikzpicture}
+    \draw[thin, gray!20] (-4,-4) grid (4,4);
+    \foreach \x in {-4,-3,...,4}
+    \node[below left, font=\small] at (\x,0) {$\x$};
+    \draw[-latex] (-4,0) -- (4,0) node[right]{$x$};
+    \draw[-latex] (0,-4) -- (0,4) node[above]{$y$};
+    \foreach \n in {-3,-2,...,3}
+    \draw (\n-0.5,\n-1) --++ (1,2);
+\end{tikzpicture}
+
 \section{The Cauchy-Schlömilch Transformation}
 
-\begin{lemma}[Cauchy-Schlömilch Transformation]
+\begin{lemma}[Cauchy-Schlömilch Transformation]\label{cauchy_schlomilch_transformation}
     Suppose $c>0$ and define $f:\R\exc\{0\}\to\R$ as follows:
     \begin{equation*}
         f(x) = x-\frac{c}{x}
@@ -119,17 +129,17 @@
 
 \section{Glasser's Master Theorem}
 
-The following theorem was first stated in 1983 by M. Lawrence Glasser (1933--).
+The following theorem was first stated in 1983 by \href{https://wikitia.com/wiki/M._Lawrence_Glasser}{M. Lawrence Glasser} (1933--).
 
 \begin{theorem}[Glasser's Master Theorem]\label{glassers_master_theorem}
-    Suppose $a_1<a_2<\cdots<a_n$, $c_1,c_2,\ldots,c_n>0$ and $b\in\R$. Define $f:\R\exc\{a_1,a_2,\ldots,a_n\}$ as follows:
+    Suppose $a_1,a_2,\cdots,a_n\in\R$, $c_1,c_2,\ldots,c_n>0$ and $b\in\R$. Define $f:\R\exc\{a_1,a_2,\ldots,a_n\}$ as follows:
     \begin{equation*}
         f(x) = x-b-\frac{c_1}{x-a_1}-\frac{c_2}{x-a_2}-\cdots-\frac{c_n}{x-a_n}
     \end{equation*}
     Then $f$ preserves the Lebesgue measure on $\R$.
 \end{theorem}
 \begin{proof}
-    Define $a_0=-\infty$ and $a_{n+1}=\infty$, and for each $k\in\{0,1,\ldots,n\}$, define $I_k=\qty(a_k,a_{k+1})$. Note that for all $x\in\R\exc\{a_1,a_2,\ldots,a_n\}$, we have:
+    Assume without loss of generality that $a_1<a_2<\cdots<a_n$. Define $a_0=-\infty$ and $a_{n+1}=\infty$, and for each $k\in\{0,1,\ldots,n\}$, define $I_k=\qty(a_k,a_{k+1})$. Note that for all $x\in\R\exc\{a_1,a_2,\ldots,a_n\}$, we have:
     \begin{equation*}
         f'(x)
         = 1+\frac{c_1}{(x-a_1)^2}+\frac{c_2}{(x-a_2)^2}+\cdots+\frac{c_n}{(x-a_n)^2}
