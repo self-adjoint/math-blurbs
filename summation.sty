@@ -1,0 +1,28 @@
+% File created as 'summation.sty' May 15, 2026
+
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{summation}[2026/05/15 Summation]
+
+\RequirePackage{pgfopts}
+\RequirePackage{xparse}
+
+\pgfkeys{
+    /default/.is family,
+    /default,
+    start/.store in   = \default@start,
+    start             = 0,
+}
+
+\ProcessPgfOptions{/default}
+
+\RequirePackage{amssymb}
+
+\def\summationdefaultstart{0}
+
+\DeclareOption{zero}{\def\summationdefaultstart{0}}
+\DeclareOption{one}{\def\summationdefaultstart{1}}
+
+
+\newcommand*{\sumn}[1][\default@start]{\sum_{n=#1}^{\infty}}
+
+

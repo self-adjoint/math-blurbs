@@ -1,0 +1,237 @@
+\documentclass{article}
+
+% ---------- packages ----------
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{xcolor}
+\usepackage{etoolbox}
+\usepackage{hyperref}
+\usepackage{cleveref}
+\usepackage{xparse}
+\usepackage[most]{tcolorbox}
+
+% ---------- theorem styles ----------
+\newtheoremstyle{mytheoremstyle}{}{}{}{}{\sffamily\bfseries}{.}{ }{}
+\newtheoremstyle{myconjecturestyle}{}{}{}{}{\sffamily\bfseries}{.}{ }{\thmnote{#3}}
+
+% ---------- theorem environments ----------
+\theoremstyle{mytheoremstyle}{\newtheorem{definition}{Definition}[section]}
+\theoremstyle{mytheoremstyle}{\newtheorem{proposition}[definition]{Proposition}}
+\theoremstyle{mytheoremstyle}{\newtheorem{theorem}[definition]{Theorem}}
+\theoremstyle{mytheoremstyle}{\newtheorem{lemma}[definition]{Lemma}}
+\theoremstyle{mytheoremstyle}{\newtheorem{corollary}[definition]{Corollary}}
+
+\tcbset{
+    tbox_DPLTC_style/.style={
+        enhanced jigsaw,
+        colback=#1!10, colframe=#1!80!black,
+        boxrule=0pt,
+        fonttitle=\sffamily\bfseries, coltitle=black,
+        separator sign={}, label separator={},
+        description font=\normalfont\sffamily,
+        description delimiters={(}{)},
+        attach title to upper, after title={.\ },
+        frame hidden, borderline west={2pt}{0pt}{#1},
+        sharp corners,
+        top=2pt, bottom=2pt, left=5pt, right=5pt,
+        beforeafter skip=10pt, breakable,
+    },
+    tbox_DPLTC_style*/.style={
+        tbox_DPLTC_style=#1,
+        interior hidden,
+        top=-2pt, bottom=-2pt,
+    },
+}
+
+% ---------- colours ----------
+\definecolor{tcol_DEF}{HTML}{E40125}
+\definecolor{tcol_PRP}{HTML}{EB8407}
+\definecolor{tcol_LEM}{HTML}{05C4D9}
+\definecolor{tcol_THM}{HTML}{1346E4}
+\definecolor{tcol_COR}{HTML}{7904C2}
+
+\tcolorboxenvironment{definition}{tbox_DPLTC_style=tcol_DEF}
+\tcolorboxenvironment{proposition}{tbox_DPLTC_style=tcol_PRP}
+\tcolorboxenvironment{theorem}{tbox_DPLTC_style=tcol_THM}
+\tcolorboxenvironment{lemma}{tbox_DPLTC_style=tcol_LEM}
+\tcolorboxenvironment{corollary}{tbox_DPLTC_style=tcol_COR}
+\tcolorboxenvironment{proof}{boxrule=0pt,boxsep=0pt,blanker,borderline west={2pt}{0pt}{CadetBlue!80!white},left=8pt,right=8pt,sharp corners,before skip=10pt,after skip=10pt,breakable}
+\tcolorboxenvironment{remark}{tbox_DPLTC_style*=tcol_REM}
+\tcolorboxenvironment{remarks}{tbox_DPLTC_style*=tcol_REM}
+\tcolorboxenvironment{example}{tbox_DPLTC_style*=tcol_EXA}
+\tcolorboxenvironment{examples}{tbox_DPLTC_style*=tcol_EXA}
+\tcolorboxenvironment{cthm}{boxrule=0pt,boxsep=0pt,colback={gray!10},left=8pt,right=8pt,enhanced jigsaw, borderline west={2pt}{0pt}{gray},sharp corners,before skip=10pt,after skip=10pt,breakable}
+
+% ---------- cleveref hooks (TeXLive 2025+) ----------
+\AddToHook{env/proposition/begin}{\crefalias{definition}{proposition}}
+\AddToHook{env/lemma/begin}{\crefalias{definition}{lemma}}
+\AddToHook{env/theorem/begin}{\crefalias{definition}{theorem}}
+\AddToHook{env/corollary/begin}{\crefalias{definition}{corollary}}
+
+\crefformat{definition}{\normalfont\sffamily\bfseries\color{tcol_DEF}#2definition~#1#3}
+\Crefformat{definition}{\normalfont\sffamily\bfseries\color{tcol_DEF}#2Definition~#1#3}
+\crefformat{proposition}{\normalfont\sffamily\bfseries\color{tcol_PRP}#2proposition~#1#3}
+\Crefformat{proposition}{\normalfont\sffamily\bfseries\color{tcol_PRP}#2Proposition~#1#3}
+\crefformat{lemma}{\normalfont\sffamily\bfseries\color{tcol_LEM}#2lemma~#1#3}
+\Crefformat{lemma}{\normalfont\sffamily\bfseries\color{tcol_LEM}#2Lemma~#1#3}
+\crefformat{theorem}{\normalfont\sffamily\bfseries\color{tcol_THM}#2theorem~#1#3}
+\Crefformat{theorem}{\normalfont\sffamily\bfseries\color{tcol_THM}#2Theorem~#1#3}
+\crefformat{corollary}{\normalfont\sffamily\bfseries\color{tcol_COR}#2corollary~#1#3}
+\Crefformat{corollary}{\normalfont\sffamily\bfseries\color{tcol_COR}#2Corollary~#1#3}
+
+% ---------- \Nref implementation ----------
+\makeatletter
+
+\let\orig@thmhead\thmhead
+\renewcommand{\thmhead}[3]{%
+  \gdef\@currentthmname{#3}%
+  \gdef\@currentthmtype{#1}%
+  \orig@thmhead{#1}{#2}{#3}%
+}
+
+\NewDocumentCommand{\namedlabel}{m}{%
+  \ifx\@currentthmname\@empty
+    \PackageError{Nref}{%
+      \string\namedlabel\space used on label '#1', but this theorem has no name%
+    }{%
+      Add an optional name: \string\begin{theorem}[Name]\string\namedlabel{#1}%
+    }%
+  \else
+    \protected@write\@auxout{}{%
+      \string\newlabel{thmname@#1}{{\@currentthmname}}%
+    }%
+    \label{#1}%
+  \fi
+}
+
+\newcommand{\Nref@format}[2]{%
+  % #1 = env type, #2 = name
+  \normalfont\sffamily\bfseries
+  \ifstrequal{#1}{Definition}{\color{tcol_DEF}}{%
+  \ifstrequal{#1}{Proposition}{\color{tcol_PRP}}{%
+  \ifstrequal{#1}{Lemma}{\color{tcol_LEM}}{%
+  \ifstrequal{#1}{Theorem}{\color{tcol_THM}}{%
+  \ifstrequal{#1}{Corollary}{\color{tcol_COR}}{%
+  }}}}}%
+  #2%
+}
+
+% Helper: receives the \newlabel value as two brace groups and formats them
+\newcommand{\Nref@unpack}[2]{\Nref@format{#2}{#1}}
+
+\NewDocumentCommand{\Nref}{m}{%
+  \ifcsname r@thmname@#1\endcsname
+    \hyperref[#1]{%
+      \expandafter\Nref@unpack\csname r@thmname@#1\endcsname
+    }%
+  \else
+    \PackageError{Nref}{%
+      \string\Nref\space used on label '#1' but no name was stored%
+    }{%
+      Use \string\namedlabel{#1} instead of \string\label{#1} inside the theorem%
+    }%
+  \fi
+}
+
+\makeatother
+
+% ---------- document ----------
+\begin{document}
+
+\section{Definitions and theorems}
+
+\begin{definition}[Topological Space]
+  \namedlabel{def:topspace}
+  A \emph{topological space} is a set $X$ together with a collection $\tau$
+  of subsets of $X$ satisfying the usual axioms.
+\end{definition}
+
+\begin{definition}
+  \label{def:continuous}
+  A map $f \colon X \to Y$ between topological spaces is \emph{continuous}
+  if the preimage of every open set is open.
+\end{definition}
+
+\begin{proposition}[Composition of Continuous Maps]
+  \namedlabel{prop:composition}
+  If $f \colon X \to Y$ and $g \colon Y \to Z$ are continuous, then
+  $g \circ f \colon X \to Z$ is continuous.
+\end{proposition}
+
+\begin{proposition}
+  \label{prop:unnamed}
+  The identity map on any topological space is continuous.
+\end{proposition}
+
+\begin{lemma}[Tube Lemma]
+  \namedlabel{lem:tube}
+  Let $X$ be a topological space and $K$ compact. If $W$ is open in
+  $X \times K$ and contains $\{x_0\} \times K$, then $W$ contains a tube
+  $U \times K$ for some open $U \ni x_0$.
+\end{lemma}
+
+\begin{lemma}
+  \label{lem:unnamed}
+  A finite union of compact sets is compact.
+\end{lemma}
+
+\begin{theorem}[Tychonoff's Theorem]
+  \namedlabel{thm:tychonoff}
+  An arbitrary product of compact spaces is compact in the product topology.
+\end{theorem}
+
+\begin{theorem}
+  \label{thm:unnamed}
+  A continuous image of a compact space is compact.
+\end{theorem}
+
+\begin{corollary}[Extreme Value Theorem]
+  \namedlabel{cor:evt}
+  A continuous real-valued function on a compact space attains its maximum
+  and minimum.
+\end{corollary}
+
+\begin{corollary}
+  \label{cor:unnamed}
+  The continuous image of a connected space is connected.
+\end{corollary}
+
+\section{References}
+
+Below we exercise every combination of named/unnamed and \verb|\Nref|/\verb|\Cref|.
+
+\subsection*{Named environments}
+
+\begin{itemize}
+  \item \Nref{def:topspace} (definition, named, \texttt{\string\Nref})
+  \item \Cref{def:topspace} (definition, named, \texttt{\string\Cref})
+  \item \Nref{prop:composition} (proposition, named, \texttt{\string\Nref})
+  \item \Cref{prop:composition} (proposition, named, \texttt{\string\Cref})
+  \item \Nref{lem:tube} (lemma, named, \texttt{\string\Nref})
+  \item \Cref{lem:tube} (lemma, named, \texttt{\string\Cref})
+  \item \Nref{thm:tychonoff} (theorem, named, \texttt{\string\Nref})
+  \item \Cref{thm:tychonoff} (theorem, named, \texttt{\string\Cref})
+  \item \Nref{cor:evt} (corollary, named, \texttt{\string\Nref})
+  \item \Cref{cor:evt} (corollary, named, \texttt{\string\Cref})
+\end{itemize}
+
+\subsection*{Unnamed environments (\texttt{\string\Cref} only)}
+
+\begin{itemize}
+  \item \Cref{def:continuous}
+  \item \Cref{prop:unnamed}
+  \item \Cref{lem:unnamed}
+  \item \Cref{thm:unnamed}
+  \item \Cref{cor:unnamed}
+\end{itemize}
+
+\subsection*{Inline prose}
+
+By \Nref{thm:tychonoff}, products of compact spaces are compact.
+Combined with \Nref{lem:tube}, this yields \Cref{cor:evt}.
+The unnamed \Cref{thm:unnamed} gives compactness of images,
+and \Cref{def:continuous} provides the relevant notion of continuity.
+
+% \Nref{def:continuous}
+
+\end{document}

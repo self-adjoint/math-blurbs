@@ -1,0 +1,19 @@
+\documentclass[10pt]{extarticle}
+
+\usepackage[start=4]{summation}
+
+
+\begin{document}
+
+$\sumn$
+
+\NewDocumentCommand{\bbraces}{>{\SplitArgument{1}{,}}G{}}{\bbracesaux#1}
+\NewDocumentCommand{\bbracesaux}{G{} G{}}{#1 -- #2}
+
+
+
+\[
+\bbraces{r,f}
+\]
+
+\end{document}

@@ -56,6 +56,54 @@
 \usepackage{theorems}
 \usepackage{timestamps}
 
+% \makeatletter
+
+% % Internal storage: \thmnamestore@<label> holds the name
+% \def\@storetheoremname#1#2{%
+%   % #1 = label, #2 = name
+%   \expandafter\gdef\csname thmnamestore@#1\endcsname{#2}%
+% }
+
+% % Hook into \label to capture the current theorem name at label-time
+% \let\orig@label\label
+% \renewcommand{\label}[1]{%
+%   \orig@label{#1}%
+%   \ifdefined\@currenttheoremname
+%     \ifx\@currenttheoremname\@empty\else
+%       \@storetheoremname{#1}{\@currenttheoremname}%
+%     \fi
+%   \fi
+% }
+
+% % Hook into amsthm to set \@currenttheoremname, clear it after the env
+% \let\orig@thm\@thm
+% \def\@thm#1#2#3{%
+%   \def\@currenttheoremname{#3}%
+%   \orig@thm{#1}{#2}{#3}%
+% }
+
+% % Clear the name after the theorem body ends
+% \let\orig@endtheorem\@endtheorem
+% \def\@endtheorem{%
+%   \orig@endtheorem
+%   \let\@currenttheoremname\@undefined
+% }
+
+% % \Nref{label}: link using stored name, error if absent
+% \NewDocumentCommand{\Nref}{m}{%
+%   \ifcsname thmnamestore@#1\endcsname
+%     \hyperref[#1]{\csname thmnamestore@#1\endcsname}%
+%   \else
+%     \PackageError{Nref}{%
+%       \string\Nref\space used on label '#1', but this theorem has no name%
+%     }{%
+%       Add an optional name argument: \string\begin{theorem}[Name]\string\label{#1}%
+%     }%
+%   \fi
+% }
+
+% \makeatother
+
 \newcommand{\remind}[1]{\textcolor{red}{\textbf{#1}}} % To remind me of unfinished work to fix later
 \newcommand{\hide}[1]{} % To hide large blocks of code without using % symbols
 
@@ -123,8 +171,136 @@ This project is hosted on GitHub: \url{https://github.com/self-adjoint/math-blur
 
 The QED symbol I have chosen to use is the \href{https://emojipedia.org/smiling-face-with-sunglasses}{Smiling Face with Sunglasses} emoji\footnote{Not to be confused with an \href{https://www.britannica.com/story/whats-the-difference-between-emoji-and-emoticons}{emoticon}, which refers to things like :) and :( and were mainly used before emojis were introduced into \href{https://emojipedia.org/unicode-6.0}{Unicode 6.0}.}. This version has been used by \href{https://www.whatsapp.com/}{WhatsApp} since 2017.
 
+\begin{theorem}[Cool thing]\label{lookatme}
+    This is a theorem
+\end{theorem}
+
+\Cref{lookatme}
+
+% \Nref{lookatme}
+
+\begin{definition}
+    A function $f:\R\to\R$ is \textbf{additive} if $f(x+y)=f(x)+f(y)$ for all $x,y\in\R$.
+\end{definition}
+\begin{remarks}\leavevmode
+    \begin{enumerate}
+        \item The equation $f(x+y)=f(x)+f(y)$ is known as the \textit{Cauchy functional equation}.
+        \item It follows by replacing $x$ with $x-y$ that $f(x-y)=f(x)-f(y)$ for all $x,y\in\R$. It then follows by substituting $x=y$ that $f(0)=0$.
+    \end{enumerate}
+\end{remarks}
+
+\begin{lemma}\label{additiverational}
+    Suppose $f:\R\to\R$ is additive. Then $f(cx)=cf(x)$ for all $c\in\Q$ and all $x\in\R$.
+\end{lemma}
+\begin{proof}
+    Suppose $x\in\R$. We first show that $f(nx)=nf(x)$ for all $n\in\Z$. Clearly this holds for $n=1$ as both sides reduce to $f(x)$. Suppose the equation holds for some $n\in\Z$. Then we have:
+    \begin{align*}
+        f((n+1)x)&=f(nx+x)=f(nx)+f(x)=nf(x)+f(x)=(n+1)f(x) \\
+        f((n-1)x)&=f(nx-x)=f(nx)-f(x)=nf(x)-f(x)=(n-1)f(x)
+    \end{align*}
+    Thus the equation holds for $n+1$ and $n-1$, and so it holds for all $n\in\Z$.\\
+    
+    Now suppose $c\in\Q$. Then $c=\frac{p}{q}$ for some $p,q\in\Z$, $q\ne0$. By what we have just shown, we have $f(px)=pf(x)$ and $f(qy)=qf(y)$ for all $x,y\in\R$. Substituting $y=\frac{x}{q}$ yields $f(x)=qf\big(\frac{x}{q}\big)$, i.e. $f\big(\frac{x}{q}\big)=\frac{1}{q}f(x)$, and so $f\big(\frac{p}{q}x\big)=\frac{p}{q}f(x)$. Thus $f(cx)=cf(x)$ for all $c\in\Q$ and all $x\in\R$.
+\end{proof}
+
+\begin{proposition}\label{additivelmcont0}
+    If $f:\R\to\R$ is additive and Lebesgue measurable, then $f$ is continuous at $0$.
+\end{proposition}
+\begin{proof}
+    Suppose $U\sub\R$ is an open set containing $0$ and $V\sub U$ is an open set such that $\{x-y\mid x,y\in V\}\sub U$. Also suppose $(q_n)_{n=1}^\infty$ is an enumeration of $\Q$. Then we have $\cuppn(q_n+V)=\R$, and so $\cuppn f^{-1}(q_n+V)=\R$ as well. For each $n\in\N$, define $W_n=f^{-1}(q_n+V)$. Then we have $\cuppn W_n=\R$, so $\mu(W_n)>0$ for at least one $n\in\N$. By Sierpinski's theorem on sets of differences, the set $\{x-y\mid x,y\in W_n\}$ contains $(-\ep,\ep)$ for some $\ep>0$. Since $\{x-y\mid x,y\in W_n\}\sub f^{-1}(\{x-y\mid x,y\in V\})\sub f^{-1}(U)$, it follows that $f^{-1}(U)$ contains $(-\ep,\ep)$. Thus $f$ is continuous at $0$.
+    % https://math.stackexchange.com/questions/359183/measurable-cauchy-function-is-continuous
+\end{proof}
+
+\begin{lemma}\label{additivec1p}
+    If $f:\R\to\R$ is additive and continuous at one point, then it is continuous on $\R$.
+\end{lemma}
+\begin{proof}
+    Suppose $f$ is continuous at some $a\in\R$. Then we have $\limx f(x)=f(a)$. For any $b\in\R$, we have:
+    \begin{equation*}
+        \lim_{x\to b} f(x)=\lim_{x\to a} f(x-a+b)=\lim_{x\to a} (f(x)-f(a)+f(b))=\lim_{x\to a} f(x)-f(a)+f(b)=f(b)
+    \end{equation*}
+    Thus $f$ is continuous at every $b\in\R$.
+\end{proof}
+
+\begin{proposition}\label{additivecont}
+    Suppose $f:\R\to\R$ is additive and continuous. Then there is a constant $a\in\R$ such that $f(x)=ax$ for all $x\in\R$.
+\end{proposition}
+\begin{proof}
+    Define $a=f(1)$. By \Cref{additiverational}, we have $f(cy)=cf(y)$ for all $c\in\Q$ and all $y\in\R$. Setting $y=1$ yields $f(c)=cf(1)=ac$. Suppose $x\in\R$ and $(q_n)$ is a sequence in $\Q$ that converges to $x$. Since $f$ is continuous, the sequence $(f(q_n))$ converges to $f(x)$. This yields $f(x)=\limn f(q_n)=\lim aq_n=a\limn q_n=ax$. Thus $f(x)=ax$ for all $x\in\R$.
+\end{proof}
+
+\begin{theorem}\label{additivelm}
+    Suppose $f:\R\to\R$ is additive and Lebesgue measurable. Then there is a constant $a\in\R$ such that $f(x)=ax$ for all $x\in\R$.
+\end{theorem}
+\begin{proof}
+    By \Cref{additivelmcont0}, $f$ is continuous at $0$, so by \Cref{additivec1p}, it is continuous on $\R$, and so by \Cref{additivecont}, we have $f(x)=ax$ for all $x\in\R$, where $a=f(1)$ is a constant.
+\end{proof}
+
+\begin{corollary}
+    Suppose $f:\R\to\R$ is Lebesgue measurable and $f(x+y)=f(x)f(y)$ for all $x,y\in\R$. Then either $f\equiv0$ or there is a constant $a>0$ such that $f(x)=a^x$ for all $x\in\R$.
+\end{corollary}
+\begin{proof}
+    Clearly $f\equiv0$ satisfies the above conditions. Note that if $f(x)=0$ for some $x\in\R$, then $f(x+y)=0f(y)=0$ for all $y\in\R$, and so $f\equiv0$. Suppose $f\not\equiv0$. Then $f(x)\ne0$ for all $x\in\R$. Moreover, we have $f(x)>0$ for all $x\in\R$, since $f(x)=f\left(\frac{x}{2}\right)^2$. Define $g:\R\to\R$ by $g(x)=\ln(f(x))$. This is well-defined as $f(x)>0$ for all $x\in\R$. We also have $g(x+y)=\ln(f(x+y))=\ln(f(x)f(y))=\ln(f(x))+\ln(f(y))=g(x)+g(y)$. Thus $g$ is additive. It is also Lebesgue measurable as $g=\ln(f)$ and $\ln$ is continuous. By \Cref{additivelm}, we have $g(x)=bx$ for all $x\in\R$, where $b=g(1)$ is a constant. Thus $f(x)=e^{bx}=a^x$ for all $x\in\R$, where $a=e^b$.
+\end{proof}
+
+Since $\R$ is a vector space over $\Q$, it has a basis. In other words, there is a set $\Bs\sub\R$ such that every $x\in\R$ can be expressed uniquely as $x=q_1x_1+q_2x_2+\cdots+q_nx_n$, where $x_1,x_2,...,x_n\in\Bs$ and $q_1,q_2,...,q_n\in\Q$. We now assign arbitrary values to $f(b)$ for every $b\in\Bs$. Since $\Bs$ is linearly independent over $\Q$, the value of $f(b)$ for any given $b\in\Bs$ is not affected by the values of $f$ at other points in $\Bs$, i.e. whatever values $f$ takes at points in $\Bs$, they will not contradict the equation $f(x+y)=f(x)+f(y)$. Also, since $\Bs$ spans $\R$, the values of $f$ at points in $\Bs$ uniquely determine its values at every point in $\R$.
+
+\begin{definition}
+    Suppose $I\sub\R$ is an interval. A function $f:I\to\R$ is \textbf{midpoint convex} (or \textit{Jensen convex} or \textit{midconvex}) on $I$ if $f\left(\frac{x+y}{2}\right)\le\frac{f(x)+f(y)}{2}$ for all $x,y\in I$.
+\end{definition}
+\begin{remark}
+    It follows directly (by setting $\lam=\frac{1}{2}$ in the definition of a convex function) that every convex function is midpoint convex.
+\end{remark}
 
 
+
+\begin{theorem}
+    If $f:I\to\R$ is midpoint convex and continuous, then $f$ is convex.
+\end{theorem}
+\begin{proof}
+    Since $f$ is midpoint convex, for any $x,y\in I$, we have $f\left(\frac{x+y}{2}\right)\le\frac{f(x)+f(y)}{2}$. Since $I$ is an interval, we also have $\frac{x+y}{2}\in I$. This implies:
+    \begin{align*}
+        f\left(\frac{3}{4}x+\frac{1}{4}y\right)
+        &=f\left(\frac{1}{2}\left(\frac{x+y}{2}+y\right)\right)
+        \le\frac{1}{2}\left(f\left(\frac{x+y}{2}+f(y)\right)\right)
+        \le\frac{1}{2}\left(\frac{f(x)+f(y)}{2}+f(y)\right)
+        =\frac{3}{4}f(x)+\frac{1}{4}f(y)
+        \\
+        f\left(\frac{1}{4}x+\frac{3}{4}y\right)
+        &=f\left(\frac{1}{2}\left(x+\frac{x+y}{2}\right)\right)
+        \le\frac{1}{2}\left(f(x)+f\left(\frac{x+y}{2}\right)\right)
+        \le\frac{1}{2}\left(f(x)+\frac{f(x)+f(y)}{2}\right)
+        =\frac{1}{3}f(x)+\frac{1}{4}f(y)
+    \end{align*}
+    Repeating this process, we have for all $n\in\N$ and all $m\in\{0,1,...,2^n\}$:
+    \begin{equation*}
+        f\left(\frac{m}{2^n}x+\left(1-\frac{m}{2^n}\right)y\right)
+        \le\frac{m}{2^n}f(x)+\left(1-\frac{m}{2^n}\right)f(y)
+    \end{equation*}
+    Now suppose $x,y\in I$ and $\lam\in[0,1]$. Then there is a sequence $(q_n)$ of rational numbers in $[0,1]$ with denominators $2^n$ that converges to $\lam$, e.g. $q_n=\frac{\lfloor 2^n\lam\rfloor}{2^n}$. For each $n\in\N$, we have $f(q_nx+(1-q_n)y)\le q_nf(x)+(1-q_n)f(y)$. As $n\to\infty$, the right side tends to $\lam f(x)+(1-\lam)f(y)$, and since $f$ is continuous, the left side tends to $f(\lam x+(1-\lam)y)$. Thus $f(\lam x+(1-\lam)y)\le\lam f(x)+(1-\lam)f(y)$ for all $x,y\in I$ and all $\lam\in[0,1]$, and so $f$ is convex.
+\end{proof}
+
+\begin{proof}
+    Suppose $f:I\to\R$ is midpoint convex and discontinuous at some $x\in I^\circ$. Then there is a sequence $(x_n)$ in $I$ such that $\limn x_n=x$ but $\limn f(x_n)\ne f(x)$.
+\end{proof}
+
+\begin{theorem}
+    If $f:I\to\R$ is midpoint convex and bounded on some open subinterval $(a,b)\sub I$, then $f$ is continuous (and thus convex).
+\end{theorem}
+
+\begin{theorem}[Sierpiński's Theorem on Convex Functions]
+    If $f:I\to\R$ is midpoint convex and Lebesgue measurable, then $f$ is convex.
+\end{theorem}
+
+\begin{theorem}[Ostrowski's Theorem on Convex Functions]
+    If $f:I\to\R$ is midpoint convex and bounded on a Lebesgue measurable set with positive measure, then $f$ is convex.
+\end{theorem}
+\begin{proof}
+    Since $E\in\Ls(\R)$ and $\mu(E)>0$, there is an open set $G\sub I$, $G\sups E$ such that $\mu(E)\le\mu(G)<\frac{4}{3}\mu(E)$. Since $G$ is open, it can be expressed as a countable union of disjoint open intervals $G=\cuppn I_n$. Thus we have $\sumn\mu(E\cap I_n)\le\sumn\mu(I_n)<\frac{4}{3}\mu(E\cap I_n)$. Thus there is at least one $n\in\N$ such that $\mu(E\cap I_n)\le\mu(I_n)<\frac{4}{3}\mu(E\cap I_n)$. Define $J=E\cap I_n$. Since $f$ is bounded on $E$, there exists $M>0$ such that $\abs{f}\le M$ on $E$. Suppose $f$ is not convex. Then for any $x,y\in J$, there exists $\lam\in[0,1]$ such that $f(\lam x+(1-\lam)y)>\lam f(x)+(1-\lam)f(y)$.\remind{NOW WHAT?}
+\end{proof}
+% https://books.google.com.sg/books?id=P30Y7daiGvQC&pg=PA12&redir_esc=y#v=onepage&q&f=true
+
+If $f$ is convex, then $f$ is differentiable a.e. and its derivative is non-decreasing. Thus $f$ is twice differentiable a.e.
 
 
 
