@@ -32,6 +32,7 @@ jobs:
           root_file: |
             main.tex
             Integration/Leibniz_Integral_Rule.tex
+            Integration/Glassers_Master_Theorem.tex
           extra_system_packages: tzdata
         env:
           TZ: Europe/London
@@ -42,7 +43,7 @@ jobs:
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git checkout --orphan pdf-tmp
           git reset
-          git add main.pdf Leibniz_Integral_Rule.pdf
+          git add main.pdf Leibniz_Integral_Rule.pdf Glassers_Master_Theorem.pdf
           git commit -m "Update PDF"
           git push origin pdf-tmp:pdf --force
 
