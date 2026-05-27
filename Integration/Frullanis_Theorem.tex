@@ -1,0 +1,187 @@
+\documentclass[main.tex]{subfiles}
+
+\title{Frullani's Theorem}
+\author{Senan Sekhon}
+\date{\DTMToday}
+% Created September 15, 2021
+
+\begin{document}
+
+\maketitle
+
+\section{Introduction}
+
+\begin{theorem}[Frullani's Theorem]\label{frullanis_theorem}
+    Suppose $f\in C[0,\infty)$, $\lim_{x\to\infty} f(x)=L$ and $a,b>0$. Then:
+    \begin{equation*}
+        \int_0^\infty \frac{f(bx)-f(ax)}{x}\dx=\qty(L-f(0))\log(\frac{b}{a})
+    \end{equation*}
+\end{theorem}
+\begin{proof}
+    % Adapted from https://math.stackexchange.com/a/61841
+    If $a=b$, the result holds trivially as both sides are zero. Assume without loss of generality that $a<b$ (otherwise, switch $a$ and $b$). Suppose $u,v>0$ and $av>bu$. Then we have:
+    \begin{align*}
+        \int_u^v \frac{f(bx)-f(ax)}{x}\dx
+        &= \int_u^v \frac{f(bx)}{x}\dx - \int_u^v \frac{f(ax)}{x}\dx \\
+        &= \int_{bu}^{bv} \frac{f(x)}{x}\dx - \int_{au}^{av} \frac{f(x)}{x}\dx \\
+        &= \int_{av}^{bv} \frac{f(x)}{x}\dx + \int_{bu}^{av} \frac{f(x)}{x}\dx - \int_{bu}^{av} \frac{f(x)}{x}\dx - \int_{au}^{bu} \frac{f(x)}{x}\dx \\
+        &= \underbrace{\int_{av}^{bv} \frac{f(x)}{x}\dx}_{G(v)} - \underbrace{\int_{au}^{bu} \frac{f(x)}{x}\dx}_{G(u)}
+    \end{align*}
+    We now show that $\lim_{u\to0^+} G(u)=f(0)\log(\frac{b}{a})$. Suppose $\ep>0$. Then there exists $\delta>0$ such that $\abs{f(u)-f(0)}<\frac{\ep}{\log(b/a)}$ for all $0\le u<\frac{\delta}{b}$ (and so $au,bu<\delta$). This yields:
+    \begin{align*}
+        \abs{G(u)-f(0)\log(\frac{b}{a})}
+        &= \abs{\int_{au}^{bu} \frac{f(x)}{x}\dx-f(0)\log(\frac{b}{a})}
+        = \abs{\int_{au}^{bu} \frac{f(x)}{x}\dx-f(0)\int_{au}^{bu} \frac{1}{x}\dx} \\
+        &= \abs{\int_{au}^{bu} \frac{f(x)-f(0)}{x}\dx}
+        \le \int_{au}^{bu} \frac{\abs{f(x)-f(0)}}{x}\dx \\
+        &\le \frac{\ep}{\log(b/a)}\int_{au}^{bu} \frac{1}{x}\dx
+        = \frac{\ep}{\log(b/a)}\log(\frac{b}{a})
+        =\ep
+    \end{align*}
+    Thus $\lim_{u\to0^+} G(u)=f(0)\log(\frac{b}{a})$.\\
+
+    We now show that $\lim_{v\to\infty} G(v)=L\log(\frac{b}{a})$. Suppose $\ep>0$. Then there exists $H>0$ such that $\abs{f(x)-L}<\frac{\ep}{\log(b/a)}$ for all $x>H$. This yields:
+    \begin{align*}
+        \abs{G(v)-L\log(\frac{b}{a})}
+        &= \abs{\int_{av}^{bv} \frac{f(x)}{x}\dx-L\log(\frac{b}{a})}
+        = \abs{\int_{av}^{bv} \frac{f(x)}{x}\dx-L\int_{av}^{bv} \frac{1}{x}\dx} \\
+        &= \abs{\int_{av}^{bv} \frac{f(x)-L}{x}\dx}
+        \le \int_{av}^{bv} \frac{\abs{f(x)-L}}{x}\dx
+        \le \frac{\ep}{\log(b/a)}\int_{av}^{bv} \frac{1}{x}\dx
+        \le \frac{\ep}{\log(b/a)}\log(\frac{b}{a})
+        =\ep
+    \end{align*}
+    Thus $\lim_{v\to\infty} G(v)=L\log(\frac{b}{a})$. Finally, we have:
+    \begin{equation*}
+        \int_0^\infty \frac{f(bx)-f(ax)}{x}\dx
+        = \lim_{v\to\infty} G(v) - \lim_{u\to0^+} G(u)
+        = (L-f(0))\log(\frac{b}{a}) \qedhere
+    \end{equation*}
+\end{proof}
+\begin{proof}[A simpler proof, assuming $f$ is differentiable and $f'$ is integrable on $[0,\infty)$]
+    \begin{equation*}
+        \int_0^\infty \frac{f(bx)-f(ax)}{x}\dx
+        = \int_0^\infty \int_a^b f'(xy)\dx\dy
+        = \int_a^b \int_0^\infty f'(xy)\dy\dx
+        = \int_a^b \frac{L-f(0)}{y}\dy
+        = (L-f(0))\log(\frac{b}{a}) \qedhere
+    \end{equation*}
+\end{proof}
+
+Frullani's theorem was first stated\footnote{\url{http://www.ams.org/journals/proc/1990-109-01/S0002-9939-1990-1007485-4/S0002-9939-1990-1007485-4.pdf}} in 1821 in a letter from Giuliano Frullani (1795--1834) to \href{https://mathshistory.st-andrews.ac.uk/Biographies/Plana/}{Giovanni Plana} (1781--1864), though a complete proof
+was only given in 1823 by \href{https://mathshistory.st-andrews.ac.uk/Biographies/Cauchy/}{Augustin-Louis Cauchy} (1789--1857).
+
+\begin{example}
+    $f(x)=e^{-x}$
+    \begin{equation*}
+        \int_0^\infty \frac{e^{-bx}-e^{-ax}}{x}\dx = -\log(\frac{b}{a})
+    \end{equation*}
+\end{example}
+
+\begin{example}
+    $f(x)=\arctan(x)$
+    \begin{equation*}
+        \int_0^\infty \frac{\arctan(bx)-\arctan(ax)}{x}\dx = \frac{\pi}{2}\log(\frac{b}{a})
+    \end{equation*}
+\end{example}
+
+\begin{example}
+    $f(x)=\arcsec(x+1)$
+    \begin{equation*}
+        \int_0^\infty \frac{\arcsec(bx+1)-\arcsec(ax+1)}{x}\dx = \frac{\pi}{2}\log(\frac{b}{a})
+    \end{equation*}
+\end{example}
+
+\begin{example}
+    $f(x)=\tanh(x)$
+    \begin{equation*}
+        \int_0^\infty \frac{\tanh(bx)-\tanh(ax)}{x}\dx = \log(\frac{b}{a})
+    \end{equation*}
+    For certain values of $a$ and $b$, this can be rewritten in other forms, e.g.
+    \begin{align*}
+        \tanh(2x)-\tanh(x)
+        &= \tanh(x)\sech(2x) \\
+        \tanh(3x)-\tanh(x)
+        &= \frac{2\tanh(x)\sech(x)^2}{1+3\tanh(x)^2} \\
+        \tanh(3x)-\tanh(2x)
+        &= \frac{\tanh(x)\sech(x)^4}{\qty\big(1+\tanh(x)^2)\qty\big(1+3\tanh(x)^2)}
+    \end{align*}
+\end{example}
+
+\begin{example}
+    $f(x)=\sech(x)$
+    \begin{equation*}
+        \int_0^\infty \frac{\sech(bx)-\sech(ax)}{x}\dx = -\log(\frac{b}{a})
+    \end{equation*}
+    For certain values of $a$ and $b$, this can be rewritten in other forms, e.g.
+    \begin{align*}
+        \sech(x)-\sech(2x)
+        &= \frac{\sech(x)(1-\sech(x))(2+\sech(x))}{2-\sech(x)^2} \\
+        \sech(x)-\sech(3x)
+        &= \frac{4\sech(x)\tanh(x)^2}{4-3\sech(x)^2}
+    \end{align*}
+\end{example}
+
+\begin{example}
+    $f(x)=\arctan(\sinh(x))$
+    \begin{equation*}
+        \int_0^\infty \frac{\arctan(\sinh(bx))-\arctan(\sinh(ax))}{x}\dx = \frac{\pi}{2}\log(\frac{b}{a})
+    \end{equation*}
+    \begin{align*}
+        \arctan(\sinh(2x))-\arctan(\sinh(x))
+        &=\arctan(\frac{\sinh(2x)-\sinh(x)}{1+\sinh(x)\sinh(2x)}) \\
+        &=\arctan(\frac{2\sinh(x)\cosh(x)-\sinh(x)}{1+\sinh(x)\qty(2\sinh(x)\cosh(x))}) \\
+        &=\arctan(\frac{\sinh(x)(2\cosh(x)-1)}{1+2\sinh(x)^2\cosh(x)})
+    \end{align*}
+\end{example}
+
+The last part of the proof of \hyperref[frullanis_theorem]{Frullani's theorem} can be adapted to obtain a more general result:
+
+\begin{theorem}
+    % https://www.pnas.org/doi/pdf/10.1073/pnas.35.10.612
+    Suppose $f\in C[0,\infty)$, $\lim_{x\to\infty} \frac{1}{x}\int_0^x f(y)\dy=L$ and $a,b>0$. Then:
+    \begin{equation*}
+        \int_0^\infty \frac{f(bx)-f(ax)}{x}\dx=\qty(L-f(0))\log(\frac{b}{a})
+    \end{equation*}
+\end{theorem}
+
+\begin{example}
+    $f(x)=\cos(x)$
+    \begin{equation*}
+        \int_0^\infty \frac{\cos(bx)-\cos(ax)}{x}\dx = -\log(\frac{b}{a})
+    \end{equation*}
+    In this case, $\lim_{x\to\infty} \frac{1}{x}\int_0^x \cos(y)\dy=\lim_{x\to\infty} \frac{\sin(x)}{x}=0$ while $\lim_{x\to\infty} \cos(x)$ does not exist.\\
+    
+    Another way to evaluate this integral is to use Frullani's theorem with $f(x)=e^{-px}\cos(x)$ for $p>0$, then take the limit as $p\to0^+$. However, this requires care as the integral is not absolutely convergent for $p=0$.
+\end{example}
+\begin{example}
+    Suppose $p,q\in\R$, $p>\abs{q}$. Then we have:
+    \begin{equation*}
+        \int_0^\infty \frac{\sin(px)\sin(qx)}{x}\dx
+        = \frac{1}{2}\int_0^\infty \frac{\cos((p-q)x)-\cos((p+q)x)}{x}\dx
+        = \frac{1}{2}\log(\frac{p+q}{p-q})
+        = \arctanh(\frac{q}{p})
+    \end{equation*}
+\end{example}
+
+
+
+\begin{equation*}
+    \int_0^\infty \frac{\sech(x)(1-\sech(x))(2+\sech(x))}{x\qty(2-\sech(x)^2)}\dx=\log(2)
+\end{equation*}
+\vspace{10pt}
+\begin{equation*}
+    \int_0^\infty \frac{1}{x}\arctan(\frac{\sinh(x)\qty(2\cosh(x)-1)}{1+2\sinh(x)^2\cosh(x)})\dx=\frac{\pi}{2}\log(2)
+\end{equation*}
+\vspace{10pt}
+\begin{equation*}
+    \int_0^\infty \frac{1}{x}\arccos(\frac{\cosh(4x)-\cosh(2x)+2}{2\cosh(x)\cosh(3x)})\dx=\frac{\pi}{2}\log(3)
+\end{equation*}
+\vspace{10pt}
+\begin{equation*}
+    \int_0^1 \frac{x}{(1+3x^2)\log(\dfrac{1+x}{1-x})}\dx=\frac{\log(3)}{4}
+\end{equation*}
+
+More examples are available at \url{https://scientia.mat.utfsm.cl/archivos/vol19/vol19art14.pdf}.
+
+\end{document}

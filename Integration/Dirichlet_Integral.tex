@@ -1,0 +1,82 @@
+\documentclass[main.tex]{subfiles}
+
+\title{Dirichlet Integral}
+\author{Senan Sekhon}
+\date{\DTMToday}
+% Created September 15, 2021
+
+\begin{document}
+
+\maketitle
+
+\section{Introduction}
+
+\begin{lemma}[Dirichlet Kernel]\label{dirichlet_kernel}
+    For all $n\in\N_0$ and all $x\in\R$, we have:
+    \begin{equation*}
+        1+2\sumkn\cos(2kx) = \frac{\sin((2n+1)x)}{\sin(x)}
+    \end{equation*}
+\end{lemma}
+\begin{proof}
+    Clearly the identity holds for $n=0$ as both sides are $1$. Suppose the identity holds for some $n\in\N_0$. We want to show it holds for $n+1$. We have:
+    \begin{align*}
+        1+2\sum_{k=1}^{n+1}\cos(2kx)
+        &= 1+2\sumkn\cos(2kx)+2\cos((2n+2)x)=\frac{\sin((2n+1)x)}{\sin(x)}+2\cos((2n+2)x) \\
+        &= \frac{\sin((2n+1)x)+2\sin(x)\cos((2n+2)x)}{\sin(x)}
+    \end{align*}
+    Note that $\sin((2n+3)x)-\sin((2n+1)x)=2\sin(x)\cos((2n+2)x)$. This yields:
+    \begin{equation*}
+        1+2\sum_{k=1}^{n+1}\cos(2kx)
+        = \frac{\sin((2n+1)x)+\sin((2n+3)x)-\sin((2n+1)x)}{\sin(x)}
+        = \frac{\sin((2n+3)x)}{\sin(x)}
+    \end{equation*}
+    Thus the identity holds for $n+1$, and so it holds for all $n\in\N_0$.
+\end{proof}
+
+\begin{theorem}[Dirichlet Integral]
+    \begin{equation*}
+        \int_0^\infty \frac{\sin(x)}{x}\dx = \frac{\pi}{2}
+    \end{equation*}
+\end{theorem}
+\begin{proof}
+    Define $K:\qty[0,\frac{\pi}{2}]\to\R$ as follows:
+    \begin{equation*}
+        K(x) = \begin{cases}
+            \dfrac{\sin((2n+1)x)}{\sin(x)} & x\ne 0 \\
+            2n+1 & x=0
+        \end{cases}
+    \end{equation*}
+    Clearly $K$ is continuous on $\big(0,\frac{\pi}{2}\big]$, and:
+    \begin{align*}
+        \lim_{x\to0^+} K(x)
+        &= \lim_{x\to0^+} \frac{\sin((2n+1)x)}{\sin(x)} \\
+        &= \lim_{x\to0^+} (2n+1)\frac{\sin((2n+1)x)}{(2n+1)x}\frac{x}{\sin(x)} \\
+        &= (2n+1)\qty(\lim_{x\to0^+} \frac{\sin((2n+1)x)}{(2n+1)x})\qty(\lim_{x\to0^+} \frac{x}{\sin(x)}) \\
+        &= (2n+1) \cdot 1 \cdot 1 \\
+        &= 2n+1
+    \end{align*}
+    Thus $K$ is continuous (and thus Riemann integrable) on $\qty[0,\frac{\pi}{2}]$. Using the \hyperref[dirichlet_kernel]{Dirichlet kernel}, we have:
+    \begin{equation*}
+        \int_0^{\pi/2} \frac{\sin((2n+1)x)}{\sin(x)}\dx
+        = \int_0^{\pi/2} \qty(1+2\sumkn\cos(2kx))\dx
+        = \int_0^{\pi/2} 1\dx + 2\sumkn\int_0^{\pi/2} \cos(2kx)\dx
+        = \frac{\pi}{2}
+    \end{equation*}
+    We also have:
+    \begin{equation*}
+        \int_0^{\pi/2} \frac{\sin((2n+1)x)}{x}\dx
+        = \int_0^{(2n+1)\pi/2} \frac{\sin(x)}{x}\dx
+    \end{equation*}
+    As $n\to\infty$, this tends to $\int_0^\infty \frac{\sin(x)}{x}\dx$. Define $g:(0,\frac{\pi}{2}]\to\R$ by $g(x)=\frac{1}{x}-\frac{1}{\sin(x)}$. Clearly $g$ is continuous on $\left(0,\frac{\pi}{2}\right]$. Also, using L'Hôpital's rule twice, we have:
+    \begin{equation*}
+        \lim_{x\to0^+} g(x)
+        = \lim_{x\to0^+} \frac{\sin(x)-x}{x\sin(x)}
+        = \lim_{x\to0^+} \frac{\cos(x)-1}{\sin(x)+x\cos(x)}
+        = \lim_{x\to0^+} \frac{-\sin(x)}{2\cos(x)-x\sin(x)}
+        = \frac{0}{2-0}
+        = 0
+    \end{equation*}
+    Thus $g$ can be made continuous on $\qty[0,\frac{\pi}{2}]$ by setting $g(0)=0$. By the Riemann-Lebesgue lemma, we have $\int_0^{\pi/2} \qty(\frac{1}{x}-\frac{1}{\sin(x)})\sin((2n+1)x)\dx\to 0$.
+\end{proof}
+
+\end{document}
