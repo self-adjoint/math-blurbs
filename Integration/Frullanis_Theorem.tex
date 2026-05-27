@@ -184,4 +184,17 @@ The last part of the proof of \hyperref[frullanis_theorem]{Frullani's theorem} c
 
 More examples are available at \url{https://scientia.mat.utfsm.cl/archivos/vol19/vol19art14.pdf}.
 
+\begin{theorem}
+    % https://www.pnas.org/doi/pdf/10.1073/pnas.35.10.612
+    Suppose $f\in C[0,\infty)$, $\lim_{x\to\infty} \frac{1}{x}\int_0^x f(y)\dy=L$ and $a,b>0$. Then:
+    \begin{equation*}
+        \int_0^\infty \frac{f(bx)-f(ax)}{x}\dx=\qty(L-f(0))\log(\frac{b}{a})
+    \end{equation*}
+    Sub $u=e^x$ and $g(u)=f(\log(u))$, $\frac{1}{x}\int_1^{e^x} g(v)/v\dv=L$
+    \begin{equation*}
+        \int_1^\infty \frac{g(u^b)-g(u^a)}{u\log(u)}\du=\qty(L-f(0))\log(\frac{b}{a})
+    \end{equation*}
+\end{theorem}
+
+
 \end{document}
