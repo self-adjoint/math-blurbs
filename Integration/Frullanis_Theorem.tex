@@ -9,6 +9,8 @@
 
 \maketitle
 
+\VersionTimestamp
+
 \section{Introduction}
 
 \begin{theorem}[Frullani's Theorem]\label{frullanis_theorem}
@@ -137,7 +139,7 @@ was only given in 1823 by \href{https://mathshistory.st-andrews.ac.uk/Biographie
 
 The last part of the proof of \hyperref[frullanis_theorem]{Frullani's theorem} can be adapted to obtain a more general result:
 
-\begin{theorem}
+\begin{theorem}\label{frullanis_theorem_generalized_limit}
     % https://www.pnas.org/doi/pdf/10.1073/pnas.35.10.612
     Suppose $f\in C[0,\infty)$, $\lim_{x\to\infty} \frac{1}{x}\int_0^x f(y)\dy=L$ and $a,b>0$. Then:
     \begin{equation*}
@@ -190,11 +192,58 @@ More examples are available at \url{https://scientia.mat.utfsm.cl/archivos/vol19
     \begin{equation*}
         \int_0^\infty \frac{f(bx)-f(ax)}{x}\dx=\qty(L-f(0))\log(\frac{b}{a})
     \end{equation*}
-    Sub $u=e^x$ and $g(u)=f(\log(u))$, $\frac{1}{x}\int_1^{e^x} g(v)/v\dv=L$
+    Sub $u=e^x$ and $g(u)=f(\log(u))$, $\frac{1}{x}\int_1^{e^x} g(v)/v\,dv=L$
     \begin{equation*}
-        \int_1^\infty \frac{g(u^b)-g(u^a)}{u\log(u)}\du=\qty(L-f(0))\log(\frac{b}{a})
+        \int_1^\infty \frac{g(u^b)-g(u^a)}{u\log(u)}\du=\qty(L-g(1))\log(\frac{b}{a})
+    \end{equation*}
+    Sub $u=e^{-x}$ and $g(u)=f(-\log(u))$, $-\frac{1}{x}\int_1^{e^{-x}} f(v)/v\,dv=L$
+    \begin{equation*}
+        \int_0^1 \frac{g(u^b)-g(u^a)}{u\log(u)}\du=\qty(L-g(1))\log(\frac{b}{a})
     \end{equation*}
 \end{theorem}
+
+\begin{corollary}
+    Suppose $f\in C[1,\infty)$, $a,b>0$ and $\lim_{x\to\infty} \frac{1}{\log(x)}\int_1^x \frac{f(y)}{y}\dy=L$ exists and is finite. Then:
+    \begin{equation*}
+        \int_1^\infty \frac{f(x^b)-f(x^a)}{x\log(x)}\dx=\qty(L-f(1))\log(\frac{b}{a})
+    \end{equation*}
+\end{corollary}
+\begin{proof}
+    Define $g:[0,\infty)\to\R$ by $g(u)=f(e^u)$. Then $g\in C[0,\infty)$. Substituting $u=\log(x)$ into the integral yields:
+    \begin{equation*}
+        \int_1^\infty \frac{f(x^b)-f(x^a)}{x\log(x)}\dx
+        = \int_0^\infty \frac{f\qty(e^{bu})-f\qty(e^{au})}{u}\du
+        = \int_0^\infty \frac{g(bu)-g(au)}{u}\du
+    \end{equation*}
+    Similarly, substituting $u=\log(x)$ and $v=\log(y)$ into the limit condition yields:
+    \begin{equation*}
+        \frac{1}{\log(x)}\int_1^x \frac{f(y)}{y}\dy
+        = \frac{1}{u}\int_1^{e^u} \frac{f(y)}{y}\dy
+        = \frac{1}{u}\int_0^u f\qty(e^v)\,dv
+        = \frac{1}{u}\int_0^u g(v)\,dv
+    \end{equation*}
+    Thus $\lim_{u\to\infty} \frac{1}{u}\int_0^u g(v)\,dv=\lim_{x\to\infty} \frac{1}{\log(x)}\int_1^x \frac{f(y)}{y}\dy=L$. Applying \Cref{frullanis_theorem_generalized_limit} to $g$ yields:
+    \begin{equation*}
+        r
+    \end{equation*}
+\end{proof}
+
+Suppose $f(x)=\sin(\log(x))$.
+\begin{align*}
+    \int_1^x \sin
+\end{align*}
+
+Suppose $\lim_{x\to\infty} \frac{1}{x}\int_0^x f(y)\dy=L$. Substituting
+\begin{align*}
+    \frac{1}{x}\int_0^x f(y)\dy
+\end{align*}
+
+\appendix
+\section{Er}
+
+\begin{proposition}
+
+\end{proposition}
 
 
 \end{document}

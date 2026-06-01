@@ -9,6 +9,8 @@
 
 \maketitle
 
+\VersionTimestamp
+
 \newtcolorbox{diagrambox}[1]{
     enhanced,
     colback=gray!5, colframe=black,
@@ -334,6 +336,26 @@ The following integral was solved in 1844 by \href{https://mathshistory.st-andre
     Note that the function on the right, although defined piecewise, is analytic at every $t>-1$ (including $t=1$).
 \end{example}
 
+\begin{equation*}
+    \sumn \frac{(-2)^{n+1}\qty((n-1)!)^2}{(2n)!}(x-1)^n
+    = \begin{cases}
+        -\arccos(x)^2 & -1\le x\le 1 \\
+        \arccosh(x)^2 & 1\le x\le 3
+    \end{cases}
+\end{equation*}
+
+\begin{tikzpicture}
+    \draw[-latex] (-2,0) -- (5,0) node[right]{$t$};
+    \draw[-latex] (0,-4) -- (0,4) node[above]{$S(t)$};
+    \draw[thick, smooth, red, domain=-1:1, samples=51, variable=\x] plot({\x},{pi^2/8-(rad(acos(\x)))^2/2});
+    \draw[thick, smooth, blue, domain=1:5, samples=51, variable=\x] plot({\x},{pi^2/8+(ln(\x+sqrt((\x)^2-1)))^2/2});
+    \fill (-1,{-3*pi^2/8}) circle (2pt) node[left]{$\qty(-1,-\frac{3\pi^2}{8})$};
+    \fill (0,0) circle (2pt) node[below right]{$(0,0)$};
+    \fill (1,{pi^2/8}) circle (2pt) node[below right]{$\qty(1,\frac{\pi^2}{8})$};
+    \node[red] at (-2,-2) {$\dfrac{\pi^2}{8}-\dfrac{\arccos(t)^2}{2}$};
+    \node[blue] at (2,3) {$\dfrac{\pi^2}{8}+\dfrac{\arccosh(t)^2}{2}$};
+\end{tikzpicture}
+
 \begin{example}
     \begin{equation*}
         S(t) = \int_0^{\tfrac{\pi}{2}} \frac{\arctan(t\tan(x))}{\tan(x)}\dx
@@ -369,7 +391,7 @@ The following integral was solved in 1844 by \href{https://mathshistory.st-andre
     Integrating by parts yields:
     \begin{equation*}
         S'(t)
-        = \qty(-\frac{1}{2}e^{-x^2}\sin(tx))_{x=0}^{x=\infty}
+        = \qty[-\frac{1}{2}e^{-x^2}\sin(tx))]_{x=0}^{x=\infty}
         - \int_0^\infty -\frac{t}{2}e^{-x^2}\cos(tx)\dx
         = \frac{t}{2}\int_0^\infty e^{-x^2}\cos(tx)\dx
     \end{equation*}
@@ -384,6 +406,7 @@ The following integral was solved in 1844 by \href{https://mathshistory.st-andre
 \end{example}
 
 \begin{example}
+    This integral was discovered by Laplace in 1810:
     \begin{equation*}
         S(t) = \int_0^\infty \frac{\cos(tx)}{x^2+a^2}\dx
     \end{equation*}
@@ -398,7 +421,7 @@ The following integral was solved in 1844 by \href{https://mathshistory.st-andre
     This is a problem, as the integral on the right does not converge. Instead, we can integrate the expression for $S(t)$ by parts:
     \begin{align*}
         S(t)
-        = \qty(\frac{\sin(tx)}{t(x^2+a^2)})_{x=0}^{x=\infty}
+        = \qty[\frac{\sin(tx)}{t(x^2+a^2)}]_{x=0}^{x=\infty}
         - \int_0^\infty -\frac{2x\sin(tx)}{t(x^2+a^2)^2}\dx
         = \frac{2}{t}\int_0^\infty \frac{x\sin(tx)}{(x^2+a^2)^2}\dx
     \end{align*}
@@ -549,6 +572,32 @@ The Leibniz integral rule can also be adapted to the case where the limits are n
         &= b'(t)f(b(t),t)-a'(t)f(a(t),t)+\int_{a(t)}^{b(t)} \pdv{f}{t}\/(x,t)\dx
     \end{align*}
 \end{proof}
+
+% Adapted from https://rc476.user.srcf.net/de/diff_under_int.v1.1.pdf
+Fix $t_0\in I$.
+\begin{align*}
+    S(t)
+    &= \int_{a(t)}^{b(t)} f(x,t)\dx \\
+    &= \int_{b(t_0)}^{b(t)} f(x,t)\dx - \int_{a(t_0)}^{a(t)} f(x,t)\dx + \int_{a(t_0)}^{b(t_0)} f(x,t)\dx \\
+    &= \int_{b(t_0)}^{b(t)} f(x,t_0)\dx - \int_{a(t_0)}^{a(t)} f(x,t_0)\dx + \int_{a(t_0)}^{b(t_0)} f(x,t)\dx \\
+    &\quad + \int_{b(t_0)}^{b(t)} (f(x,t)-f(x,t_0))\dx - \int_{a(t_0)}^{a(t)} (f(x,t)-f(x,t_0))\dx \\
+\end{align*}
+We first show that $S_1'(t)=b'(t)f(b(t),t)$. By the \href{https://en.wikipedia.org/wiki/Fundamental_theorem_of_calculus}{fundamental theorem of calculus} and the \href{https://en.wikipedia.org/wiki/Chain_rule}{chain rule}, we have:
+\begin{align*}
+    S_1'(t) = b'(t)f(b(t),t) && S_2'(t) = a'(t)f(a(t),t)
+\end{align*}
+By \Cref{leibniz_integral_rule_riemann_integral}, we also have:
+\begin{align*}
+    S_3'(t) = \int_{a(t_0)}^{b(t_0)} \pdv{f}{t}\/(x,t)\dx
+\end{align*}
+
+Since $b$ is differentiable at $t_0$, it is continuous at $t_0$, so $\lim_{t\to t_0} \abs{b(t)-b(t_0)}=0$. Since $\pdv{f}{t}$ is continuous at $t_0$, it is bounded in a neighborhood of $t_0$, i.e. there exists
+\begin{align*}
+    \frac{S_4(t)-S_4(t_0)}{t-t_0}
+    &= \frac{1}{t-t_0}\int_{b(t_0)}^{b(t)} (f(x,t)-f(x,t_0))\dx \\
+    &= \int_{b(t_0)}^{b(t)} \frac{f(x,t)-f(x,t_0)}{t-t_0}\dx \\
+    &\le \abs{b(t)-b(t_0)}\sup_{\xi\i} \int_{b(t_0)}^{b(t)} \frac{f(x,t)-f(x,t_0)}{t-t_0}\dx \\
+\end{align*}
 
 \begin{example}[Variant of {\hyperref[serret_integral]{Serret's integral}}]
     \begin{equation*}

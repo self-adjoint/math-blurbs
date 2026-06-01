@@ -178,6 +178,56 @@ The QED symbol I have chosen to use is the \href{https://emojipedia.org/smiling-
 \Cref{lookatme}
 
 % \Nref{lookatme}
+\newpage
+\section{Limit inferior and limit superior}
+
+\begin{definition}
+    Suppose $(a_n)_{n=1}^\infty$ is a sequence in $\R$. The \textbf{limit inferior} and \textbf{limit superior} of $(a_n)_{n=1}^\infty$ respectively are given by:
+    \begin{align*}
+        \liminfn a_n = \sup_{n\in\N} \inf_{k\ge n} a_k && \limsupn a_n = \inf_{n\in\N} \sup_{k\ge n} a_k
+    \end{align*}
+    Note that $\liminfn a_n$ and $\limsupn a_n$ are allowed to be $\pm\infty$.
+\end{definition}
+
+\begin{exercise}
+    Suppose $(a_n)_{n=1}^\infty$ is a sequence in $\R$ and $x\in\R$. Prove that:
+    \begin{enumerate}
+        \item $x<\liminfn a_n$ if and only if $x<a_n$ for all but finitely many $n\in\N$.
+        \item $x<\limsupn a_n$ if and only if $x<a_n$ for infinitely many $n\in\N$.
+    \end{enumerate}
+    Do these statements hold if we replace the strict inequalities with non-strict inequalities? Prove or give a counterexample for each one.
+\end{exercise}
+
+\begin{exercise}\label{liminf_limsup_inequalities}
+    Suppose $(a_n)_{n=1}^\infty$ and $(b_n)_{n=1}^\infty$ are sequences in $\R$. Prove that:
+    \begin{equation*}
+        \liminfn a_n + \liminfn b_n
+        \le \liminfn (a_n+b_n)
+        \le \liminfn a_n + \limsupn b_n
+        \le \limsupn (a_n+b_n)
+        \le \limsupn a_n + \limsupn b_n
+    \end{equation*}
+    For each inequality, give an example of sequences $(a_n)_{n=1}^\infty$ and $(b_n)_{n=1}^\infty$ where it is strict. Can you find a single example of $(a_n)_{n=1}^\infty$ and $(b_n)_{n=1}^\infty$ where \emph{all four} inequalities are strict?
+\end{exercise}
+
+\begin{definition}
+    Suppose $(A_n)_{n=1}^\infty$ is a sequence of subsets of $\R$. The \textbf{limit inferior} and \textbf{limit superior} of $(A_n)_{n=1}^\infty$ respectively are given by:
+    \begin{align*}
+        \liminfn A_n = \cuppn \capp_{k\ge n} A_k && \limsupn A_n = \cappn \cupp_{k\ge n} A_k
+    \end{align*}
+\end{definition}
+
+\begin{exercise}
+    Suppose $(A_n)_{n=1}^\infty$ is a sequence of subsets of $\R$ and $x\in\R$. Prove that:
+    \begin{enumerate}
+        \item $x\in\liminfn A_n$ if and only if $x\in A_n$ for all but finitely many $n\in\N$.
+        \item $x\in\limsupn A_n$ if and only if $x\in A_n$ for infinitely many $n\in\N$.
+    \end{enumerate}
+\end{exercise}
+
+\begin{exercise}
+    State and prove an analog of \Cref{liminf_limsup_inequalities} for sequences of subsets of $\R$.
+\end{exercise}
 
 \begin{definition}
     A function $f:\R\to\R$ is \textbf{additive} if $f(x+y)=f(x)+f(y)$ for all $x,y\in\R$.
