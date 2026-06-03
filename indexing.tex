@@ -1,0 +1,111 @@
+% term_index_mwe.tex
+% Requires: pdflatex -> makeindex -> pdflatex -> pdflatex
+% (or: latexmk -pdf term_index_mwe.tex)
+\documentclass{article}
+
+\usepackage{imakeidx}   % index with hyperlinked page numbers
+\usepackage{hyperref}   % hyperlinks; load before xcolor to avoid option clash
+\usepackage{xcolor}     % \textcolor
+\usepackage{xparse}     % \NewDocumentCommand for starred/optional variants
+
+% ---- Set up the index -------------------------------------------------------
+\makeindex[title=Index,intoc,columns=2]
+
+% ---- Aux-writing helpers for \refterm ---------------------------------------
+%
+% \term[label]{word} writes \termdef{label}{word} to the .aux file.
+% On the next pass this defines \termtext@label, which \refterm reads.
+\makeatletter
+% Write to aux:
+\newcommand{\writetermaux}[2]{%
+  \protected@write\@auxout{}{%
+    \string\termdef{#1}{#2}%
+  }%
+}
+
+% Read from aux (defines \termtext@<label>):
+\newcommand{\termdef}[2]{%
+  \global\@namedef{termtext@#1}{#2}%
+}
+
+% ---- \term command ----------------------------------------------------------
+%
+%   \term[label]{word}  -- blue, indexed, and labelled for \refterm
+%   \term{word}         -- blue and indexed (no label)
+%   \term*{word}        -- blue only (no index entry, no label)
+%   \term*[label]{word} -- blue only, but still labelled (edge case)
+
+\NewDocumentCommand{\term}{ s o m }{%
+  \IfBooleanTF{#1}
+    {% starred branch: blue only
+      \textcolor{blue}{#3}%
+      \IfValueT{#2}{% label provided: write aux + set hyperref anchor
+        \writetermaux{#2}{#3}%
+        \phantomsection\label{term:#2}%
+      }%
+    }
+    {% unstarred branch: blue + index entry
+      \textcolor{blue}{#3}\index{#3}%
+      \IfValueT{#2}{% label provided: write aux + set hyperref anchor
+        \writetermaux{#2}{#3}%
+        \phantomsection\label{term:#2}%
+      }%
+    }%
+}
+
+% ---- \refterm command -------------------------------------------------------
+%
+%   \refterm{label}  -- hyperlink to the \term[label]{...} occurrence,
+%                       displaying the word used there in blue.
+%
+% Falls back to "??" (like \ref on first pass) if the label is unknown.
+
+\newcommand{\refterm}[1]{%
+  \hyperref[term:#1]{%
+    \textcolor{blue}{%
+      \@ifundefined{termtext@#1}{??}{\@nameuse{termtext@#1}}%
+    }%
+  }%
+}
+\makeatother
+% -----------------------------------------------------------------------------
+
+\begin{document}
+
+\tableofcontents
+\bigskip
+
+\section{Limits}
+
+We begin with the notion of a \term[lim-def]{limit}.  Informally, the
+\term{limit} of a function $f(x)$ as $x \to a$ is the value that
+$f(x)$ approaches as $x$ gets arbitrarily close to~$a$.
+
+\begin{quote}\textbf{Definition.}\quad
+  Let $f$ be defined near $a$.  We say the \term{limit} of $f$ at $a$
+  equals $L$, written $\lim_{x\to a} f(x) = L$, if for every
+  $\varepsilon > 0$ there exists $\delta > 0$ such that
+  $|f(x) - L| < \varepsilon$ whenever $0 < |x - a| < \delta$.
+\end{quote}
+
+A function that possesses a limit everywhere is called
+\term*[ttt]{well-behaved} (informal; coloured but not indexed).
+
+\section{Continuity}
+
+A function is \term[cont-def]{continuous} at a point $a$ if
+$\lim_{x \to a} f(x) = f(a)$.  \term{Continuity} on an interval means
+\term{continuous} at every point of that interval.
+
+We use \term{limit} once more here to emphasise multiple index entries.
+
+\section{Back-references}
+
+Recall the \refterm{lim-def} introduced in Section~1, and the notion
+of \refterm{cont-def} defined above.
+
+\refterm*{ttt}
+
+\printindex
+
+\end{document}

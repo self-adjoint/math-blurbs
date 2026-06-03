@@ -81,4 +81,19 @@
     Thus $g$ can be made continuous on $\qty[0,\frac{\pi}{2}]$ by setting $g(0)=0$. By the Riemann-Lebesgue lemma, we have $\int_0^{\pi/2} \qty(\frac{1}{x}-\frac{1}{\sin(x)})\sin((2n+1)x)\dx\to 0$.
 \end{proof}
 
+\begin{lemma}
+    Suppose $f\in C[0,\pi]$. Define:
+    \begin{align*}
+        b_n = \frac{2}{\pi}\int_0^\pi f(x)\sin(nx)\dx
+        &&
+        S_n = \int_0^\pi \qty(f(x)-\sumkn b_k\sin(kx))^2\dx
+    \end{align*}
+    Then:
+    \begin{equation*}
+        S_n = \int_0^\pi f(x)^2\dx - \frac{2}{\pi}\sumkn b_k^2
+    \end{equation*}
+\end{lemma}
+
+
+
 \end{document}
