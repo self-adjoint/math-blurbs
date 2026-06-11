@@ -36,20 +36,10 @@
 %   \term*[label]{word} -- blue only, but still labelled (edge case)
 
 \NewDocumentCommand{\term}{ s o m }{%
-  \IfBooleanTF{#1}
-    {% starred branch: blue only
-      \textcolor{blue}{#3}%
-      \IfValueT{#2}{% label provided: write aux + set hyperref anchor
+    \textcolor{blue}{#3}\IfBooleanF{#1}{\index{#3}}%
+    \IfValueT{#2}{% label provided: write aux + set hyperref anchor
         \writetermaux{#2}{#3}%
         \phantomsection\label{term:#2}%
-      }%
-    }
-    {% unstarred branch: blue + index entry
-      \textcolor{blue}{#3}\index{#3}%
-      \IfValueT{#2}{% label provided: write aux + set hyperref anchor
-        \writetermaux{#2}{#3}%
-        \phantomsection\label{term:#2}%
-      }%
     }%
 }
 
@@ -61,11 +51,9 @@
 % Falls back to "??" (like \ref on first pass) if the label is unknown.
 
 \newcommand{\refterm}[1]{%
-  \hyperref[term:#1]{%
-    \textcolor{blue}{%
-      \@ifundefined{termtext@#1}{??}{\@nameuse{termtext@#1}}%
+    \hyperref[term:#1]{%
+        \@ifundefined{termtext@#1}{\textcolor{red}{UNDEFINED TERM REFERENCE}}{\textcolor{blue}{\csuse{termtext@#1}}}%
     }%
-  }%
 }
 \makeatother
 % -----------------------------------------------------------------------------
