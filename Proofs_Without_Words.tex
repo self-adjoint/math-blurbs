@@ -64,19 +64,29 @@ $\cos(x+y)=\cos(x)\cos(y)-\sin(x)\sin(y)$
 
 \begin{tikzpicture}
     \pgfmathsetmacro{\halfdist}{0.5}
-    \foreach \n in {0,...,12}
+    \foreach \n in {0,...,14}
         \foreach \k in {0,...,\n}
             \node[text opacity=1] (\n---\k) at ({(2*\k-\n)*\halfdist},{-sqrt(3)*\halfdist*\n}) {\xinteval{binomial(\n,\k)}};
     % \draw ($(2---2)+(-30:\halfdist)$) arc (-30:150:\halfdist) -- ($(8---2)+(150:\halfdist)$) arc (150:210:\halfdist) -- ($(9---3)+(-150:\halfdist)$) arc (-150:30:\halfdist) -- ($(8---2)+(-15:{sqrt(2)*\halfdist})$) arc(210:150:{(sqrt(3)-1)*\halfdist}) -- cycle;
-    \begin{scope}[draw opacity=1, fill opacity=0.4, transparency group]
-        \pgfmathtruncatemacro{\n}{8}
-    \pgfmathtruncatemacro{\k}{3}
-    \coordinate (shaft) at (\k---\k);
-    \coordinate (heel) at (\n---\k);
-    \coordinate (blade) at ($(heel)+(-60:{2*\halfdist})$);
-    \draw[thick, fill=green] ($(shaft)+(-30:\halfdist)$) arc (-30:150:\halfdist) -- ($(heel)+(150:\halfdist)$) arc (150:210:\halfdist) -- ($(blade)+(-150:\halfdist)$) arc (-150:30:\halfdist) -- ($(heel)+(-15:{sqrt(2)*\halfdist})$) arc(210:150:{(sqrt(3)-1)*\halfdist}) -- cycle;
-    \draw[fill=red] ($(shaft)+(-30:\halfdist)$) arc (-30:150:\halfdist) -- ($(heel)+(150:\halfdist)$) arc (150:330:\halfdist) -- cycle;
-    \end{scope}
+    
+    \newcommand*{\hockeystick}[3][]{
+        \pgfmathtruncatemacro{\n}{#2}
+        \pgfmathtruncatemacro{\k}{#3}
+        \coordinate (shaft) at (\k---\k);
+        \coordinate (heel) at (\n---\k);
+        \coordinate (blade) at ($(heel)+(-60:{2*\halfdist})$);
+        \begin{scope}[draw opacity=1, fill opacity=0.4, transparency group]
+            
+            \fill[blue!50!gray] ($(shaft)+(-30:\halfdist)$) arc (-30:150:\halfdist) -- ($(heel)+(150:\halfdist)$) arc (150:210:\halfdist) -- ($(blade)+(-150:\halfdist)$) arc (-150:30:\halfdist) -- ($(heel)+(-15:{sqrt(2)*\halfdist})$) arc(210:150:{(sqrt(3)-1)*\halfdist}) -- cycle;
+            \fill[red] ($(shaft)+(-30:\halfdist)$) arc (-30:150:\halfdist) -- ($(heel)+(150:\halfdist)$) arc (150:330:\halfdist) -- cycle;
+        
+        \end{scope}
+        \draw ($(shaft)+(-30:\halfdist)$) arc (-30:150:\halfdist) -- ($(heel)+(150:\halfdist)$) arc (150:210:\halfdist) -- ($(blade)+(-150:\halfdist)$) arc (-150:30:\halfdist) -- ($(heel)+(-15:{sqrt(2)*\halfdist})$) arc(210:150:{(sqrt(3)-1)*\halfdist}) -- cycle;
+        \draw ($(heel)+(15:{sqrt(2)*\halfdist})$) -- ($(heel)+(-30:\halfdist)$) arc (-30:-150:\halfdist);
+    }
+    
+    \hockeystick{13}{2}
+    \hockeystick{7}{5}
     
 \end{tikzpicture}
 
@@ -115,6 +125,12 @@ $\cos(x+y)=\cos(x)\cos(y)-\sin(x)\sin(y)$
 \end{tikzpicture}
 
 \url{https://mathoverflow.net/a/8939}
+
+\begin{tikzpicture}[scale=4]
+    \draw (-1,-1) rectangle (1,1);
+    \draw (-1,-1) rectangle (1,-0.6);
+    \draw (0.6,-0.6) rectangle (1,1);
+\end{tikzpicture}
 
 
 \end{document}
