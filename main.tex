@@ -355,13 +355,30 @@ If $f$ is convex, then $f$ is differentiable a.e. and its derivative is non-decr
 \section{Induction}
 
 \begin{theorem}
-    For every $n\in\N$, $\cos(nx)$ and $\sin(nx)$ can be expressed as polynomials in $\cos(x)$.
+    For every $n\in\N$, $\cos(nx)$ and $\frac{\sin(nx)}{\sin(x)}$ can be expressed as polynomials in $\cos(x)$.
 \end{theorem}
 \begin{proof}
     Define the statement
     $P(n)$
     $\cos(nx)$ and $\frac{\sin((n+1)x)}{\sin(x)}$
+    Suppose $P(k)$ is true for some $k\in\N$. We will show $P(k+1)$ is true.
+    \begin{align*}
+        \cos((k+1)x)
+        &= \cos(x+kx) \\
+        &= \cos(x)\cos(kx) - \sin(x)\sin(kx) \\
+        &= \cos(x)\cos(kx) - \sin(x)^2\frac{\sin(kx)}{\sin(x)} \\
+        &= \cos(x)\cos(kx) - \qty(1-\cos(x)^2)\frac{\sin(kx)}{\sin(x)} \\
+    \end{align*}
+    \begin{align*}
+        \frac{\sin((k+1)x)}{\sin(x)}
+        &= \frac{\sin(x+kx)}{\sin(x)} \\
+        &= \frac{\sin(x)\cos(kx)+\cos(x)\sin(kx)}{\sin(x)} \\
+        &= \cos(kx) + \cos(x)\frac{\sin(kx)}{\sin(x)} \\
+    \end{align*}
 \end{proof}
+
+
+
 
 
 

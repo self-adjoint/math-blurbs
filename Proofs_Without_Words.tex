@@ -126,11 +126,23 @@ $\cos(x+y)=\cos(x)\cos(y)-\sin(x)\sin(y)$
 
 \url{https://mathoverflow.net/a/8939}
 
-\begin{tikzpicture}[scale=4]
-    \draw (-1,-1) rectangle (1,1);
-    \draw (-1,-1) rectangle (1,-0.6);
-    \draw (0.6,-0.6) rectangle (1,1);
+\begin{tikzpicture}[scale=1]
+    \draw (-5,0) -- (5,0);
+    \draw[thick, smooth, domain=-4:4, samples=100] plot (\x,{exp(-(\x)^2)});
+    \foreach \n in {1,2,3}
+    {
+    \draw[smooth, red, domain={-sqrt(\n):sqrt(\n)}, samples=100] plot (\x,{(1-(\x)^2/\n)^(\n)});
+    \draw[smooth, blue, domain=-4:4, samples=100] plot (\x,{(1+(\x)^2/\n)^(-\n)});
+    }
 \end{tikzpicture}
+
+\begin{align*}
+    \int_{-\sqrt{n}}^{\sqrt{n}} \qty(1-\frac{x^2}{n})^n \dx
+    &= \sqrt{n}\int_{-1}^1 \qty(1-y^2)^n \dy
+        \tag{$x=\sqrt{n}y$} \\
+    &= \sqrt{n}\int_{-\frac{\pi}{2}}^{\frac{\pi}{2}} \cos(t)^{2n+1} \dt
+        \tag{$y=\sin(t)$} \\
+\end{align*}
 
 
 \end{document}
