@@ -470,4 +470,36 @@ $\limk f(k)=\limk\limits f(k)=0$
 $$\limk f(k)=\limk\nolimits f(k)=0$$
 
 
+This appears in \url{https://mathoverflow.net/a/296540}
+
+\begin{theorem}
+    Suppose $(X,\As,\mu)$ is a measure space and $f:X\to[0,\infty]$ is mesurable. Then:
+    \begin{equation*}
+        \int f\dmu = \lim_{c\to 1^+} \sum_{n=-\infty}^{\infty} c^n\mu\qty(f^{-1}\qty([c^n,c^{n+1})))
+    \end{equation*}
+\end{theorem}
+
+\begin{tikzpicture}
+    \pgfmathdeclarefunction{f}{1}{\pgfmathparse{16/((#1)^2+4)}}
+    \pgfmathdeclarefunction{g}{1}{\pgfmathparse{2*sqrt(4/(#1)-1)}}
+    \draw (-6,0) -- (6,0);
+    \draw[thick, smooth, red, domain=-6:6, samples=100] plot (\x,{f(\x)});
+    \clip (-6,0) rectangle (6,4.8);
+    \pgfmathsetmacro{\a}{1.1}
+    \pgfmathtruncatemacro{\amin}{ceil(ln(0.01)/ln(\a))-1}
+    \pgfmathtruncatemacro{\amax}{ceil(ln(4)/ln(\a))-1}
+    \foreach \n in {\amin,...,\amax}
+    {
+        \draw[thin, fill=red, opacity=0.3] ({-g((\a)^(\n))},{(\a)^(\n)}) rectangle ({g((\a)^(\n))},{(\a)^(\n+1)});
+    }
+\end{tikzpicture}
+
+
+Suppose 
+Define $f_m(x)=f(x)^\ceil{\log_c(f(x))}$
+
+
+
+
+
 \end{document}
