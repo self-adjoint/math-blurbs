@@ -1,0 +1,22 @@
+% File created as 'number_rings.sty' May 15, 2026
+
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{number_rings}[2026/06/23 Number Rings]
+
+\RequirePackage{amsfonts}
+\RequirePackage{physics}
+\RequirePackage{tikz,pgf}
+
+% Do #2 if #1≡1 (mod 4), do #3 otherwise
+\newcommand{\ifonemodfour}[3]{%
+    \ifnum\numexpr#1-4*(#1/4)\relax=1%
+        #2%
+    \else
+        #3%
+    \fi
+}
+
+% Blackboard bold with auto-sizing parentheses and brackets, e.g. ring extensions ℤ[√2]
+\DeclareDocumentCommand{\Z}{}{\opbraces{\mathbb{Z}}}
+
+\newcommand{\Zd}[1]{\ifonemodfour{#1}{\Z[\frac{1+\sqrt{#1}}{2}]}{\Z[\sqrt{#1}]}}
