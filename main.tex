@@ -358,23 +358,63 @@ If $f$ is convex, then $f$ is differentiable a.e. and its derivative is non-decr
 \begin{theorem}
     For every $n\in\N$, $\cos(nx)$ and $\frac{\sin(nx)}{\sin(x)}$ can be expressed as polynomials in $\cos(x)$.
 \end{theorem}
+Define the
+\begin{itemize}
+    \item[$P(n)$:] $\cos(nx)$ is a polynomial in $\cos(x)$.
+    \item[$Q(n)$:] $\frac{\sin(nx)}{\sin(x)}$ is a polynomial in $\cos(x)$.
+\end{itemize}
 \begin{proof}
-    Define the statement
-    $P(n)$
-    $\cos(nx)$ and $\frac{\sin((n+1)x)}{\sin(x)}$
-    Suppose $P(k)$ is true for some $k\in\N$. We will show $P(k+1)$ is true.
+    Suppose $P(k)$ and $Q(k)$ are true for some $k\in\N$. We will show that $P(k+1)$ and $Q(k+1)$ are true.
     \begin{align*}
         \cos((k+1)x)
         &= \cos(x+kx) \\
         &= \cos(x)\cos(kx) - \sin(x)\sin(kx) \\
         &= \cos(x)\cos(kx) - \sin(x)^2\frac{\sin(kx)}{\sin(x)} \\
-        &= \cos(x)\cos(kx) - \qty(1-\cos(x)^2)\frac{\sin(kx)}{\sin(x)} \\
+        &= \cos(x)\cos(kx) - \qty(1-\cos(x)^2)\frac{\sin(kx)}{\sin(x)}
     \end{align*}
+    By the inductive hypothesis, $\cos(kx)$ and $\frac{\sin(kx)}{\sin(x)}$ are polynomials in $\cos(x)$. Thus $\cos((k+1)x)$ is a polynomial in $\cos(x)$.\\
+
+    Similarly, we have:
     \begin{align*}
         \frac{\sin((k+1)x)}{\sin(x)}
         &= \frac{\sin(x+kx)}{\sin(x)} \\
         &= \frac{\sin(x)\cos(kx)+\cos(x)\sin(kx)}{\sin(x)} \\
         &= \cos(kx) + \cos(x)\frac{\sin(kx)}{\sin(x)} \\
+    \end{align*}
+    By the inductive hypothesis, $\cos(kx)$ and $\frac{\sin(kx)}{\sin(x)}$ are polynomials in $\cos(x)$. Thus $\frac{\sin((k+1)x)}{\sin(x)}$ is a polynomial in $\cos(x)$.
+\end{proof}
+\begin{proof}
+    \begin{align}
+        \cos((k+2)x)
+        &= 2\cos(x)\cos((k+1)x) - \cos(kx)
+    \end{align}
+\end{proof}
+
+\begin{theorem}
+    For all $n\in\Z$, we have:
+    \begin{align*}
+        \cos(nx) &= 2\cos(x)\cos((n-1)x) - \cos((n-2)x) \\
+        \sin(nx) &= 2\cos(x)\sin((n-1)x) - \sin((n-2)x)
+    \end{align*}
+\end{theorem}
+\begin{proof}
+    \begin{align*}
+        \cos(nx)
+        &= \cos(x)\cos((n-1)x) - \sin(x)\sin((n-1)x) \\
+        &= \cos(x)\cos((n-1)x) - \sin(x)\qty\Big(\sin(x)\cos((n-2)x) + \cos(x)\sin((n-2)x)) \\
+        &= \cos(x)\cos((n-1)x) - \sin(x)^2\cos((n-2)x) - \sin(x)\cos(x)\sin((n-2)x) \\
+        &= \cos(x)\cos((n-1)x) - \qty(1-\cos(x)^2)\cos((n-2)x) - \sin(x)\cos(x)\sin((n-2)x) \\
+        &= \cos(x)\cos((n-1)x) - \cos((n-2)x) + \cos(x)^2\cos((n-2)x) - \sin(x)\cos(x)\sin((n-2)x) \\
+        &= \cos(x)\cos((n-1)x) - \cos((n-2)x) + \cos(x)\qty(\cos(x)\cos((n-2)x) - \sin(x)\sin((n-2)x)) \\
+        &= \cos(x)\cos((n-1)x) - \cos((n-2)x) + \cos(x)\cos((n-1)x) \\
+        &= 2\cos(x)\cos((n-1)x) - \cos((n-2)x)
+    \end{align*}
+    \begin{align*}
+        \sin(nx)
+        &= \sin(x)\cos((n-1)x) + \cos(x)\sin((n-1)x) \\
+        &= \sin(x)\qty\Big(\cos(x)\cos((n-2)x) - \sin(x)\sin((n-2)x)) + \cos(x)\sin((n-1)x) \\
+        &= \sin(x)\cos(x)\cos((n-2)x) - \sin(x)^2\sin((n-2)x) + \cos(x)\sin((n-1)x) \\
+        &= \sin(x)\cos(x)\cos((n-2)x) - \qt\sin(x)^2\sin((n-2)x) + \cos(x)\sin((n-1)x) \\
     \end{align*}
 \end{proof}
 
