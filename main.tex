@@ -397,26 +397,6 @@ Define the
         \sin(nx) &= 2\cos(x)\sin((n-1)x) - \sin((n-2)x)
     \end{align*}
 \end{theorem}
-\begin{proof}
-    \begin{align*}
-        \cos(nx)
-        &= \cos(x)\cos((n-1)x) - \sin(x)\sin((n-1)x) \\
-        &= \cos(x)\cos((n-1)x) - \sin(x)\qty\Big(\sin(x)\cos((n-2)x) + \cos(x)\sin((n-2)x)) \\
-        &= \cos(x)\cos((n-1)x) - \sin(x)^2\cos((n-2)x) - \sin(x)\cos(x)\sin((n-2)x) \\
-        &= \cos(x)\cos((n-1)x) - \qty(1-\cos(x)^2)\cos((n-2)x) - \sin(x)\cos(x)\sin((n-2)x) \\
-        &= \cos(x)\cos((n-1)x) - \cos((n-2)x) + \cos(x)^2\cos((n-2)x) - \sin(x)\cos(x)\sin((n-2)x) \\
-        &= \cos(x)\cos((n-1)x) - \cos((n-2)x) + \cos(x)\qty(\cos(x)\cos((n-2)x) - \sin(x)\sin((n-2)x)) \\
-        &= \cos(x)\cos((n-1)x) - \cos((n-2)x) + \cos(x)\cos((n-1)x) \\
-        &= 2\cos(x)\cos((n-1)x) - \cos((n-2)x)
-    \end{align*}
-    \begin{align*}
-        \sin(nx)
-        &= \sin(x)\cos((n-1)x) + \cos(x)\sin((n-1)x) \\
-        &= \sin(x)\qty\Big(\cos(x)\cos((n-2)x) - \sin(x)\sin((n-2)x)) + \cos(x)\sin((n-1)x) \\
-        &= \sin(x)\cos(x)\cos((n-2)x) - \sin(x)^2\sin((n-2)x) + \cos(x)\sin((n-1)x) \\
-        &= \sin(x)\cos(x)\cos((n-2)x) - \qt\sin(x)^2\sin((n-2)x) + \cos(x)\sin((n-1)x) \\
-    \end{align*}
-\end{proof}
 
 
 

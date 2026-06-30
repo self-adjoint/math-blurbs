@@ -55,7 +55,98 @@ $\cos(x+y)=\cos(x)\cos(y)-\sin(x)\sin(y)$
     \draw[xshift=-3pt, decorate, decoration={brace, amplitude=5pt}] (0,0) -- (0,\m) node[midway, left=5pt] {$m$};
 \end{tikzpicture}
 
-\newpage
+\begin{tikzpicture}[scale=0.6,every node/.style={transform shape}]
+%%% k=1 %%%
+\draw[fill=red!40] (0,0) rectangle (1,1) node[midway,font=\Large]{$1^2$};
+\draw[decoration={brace,mirror,amplitude=5pt,raise=2pt},decorate] (0,0)--(1,0) node[midway,below=12pt,font=\large]{1};
+\draw[decoration={brace,amplitude=5pt,raise=2pt},decorate] (0,0)--(0,1) node[midway,left=12pt,font=\large]{1};
+
+%%% k=2 %%%
+\draw[fill=Orange!40] (1,0) rectangle (3,1) node[midway,font=\Large]{$\frac{2^2}{2}$};
+\draw[fill=Orange!40] (1,1) rectangle (3,3) node[midway,font=\Large]{$2^2$};
+\draw[fill=Orange!40] (0,1) rectangle (1,3) node[midway,font=\Large]{$\frac{2^2}{2}$};
+\draw[decoration={brace,mirror,amplitude=5pt,raise=2pt},decorate] (1,0)--(3,0) node[midway,below=12pt,font=\large]{2};
+\draw[decoration={brace,amplitude=5pt,raise=2pt},decorate] (0,1)--(0,3) node[midway,left=12pt,font=\large]{2};
+
+%%% k=3 %%%
+\draw[fill=Dandelion!40] (3,0) rectangle (6,3) node[midway,font=\Large]{$3^2$};
+\draw[fill=Dandelion!40] (3,3) rectangle (6,6) node[midway,font=\Large]{$3^2$};
+\draw[fill=Dandelion!40] (0,3) rectangle (3,6) node[midway,font=\Large]{$3^2$};
+\draw[decoration={brace,mirror,amplitude=5pt,raise=2pt},decorate] (3,0)--(6,0) node[midway,below=12pt,font=\large]{3};
+\draw[decoration={brace,amplitude=5pt,raise=2pt},decorate] (0,3)--(0,6) node[midway,left=12pt,font=\large]{3};
+
+%%% k=4 %%%
+\draw[fill=Green!40] (6,0) rectangle (10,2);
+\draw[fill=Green!40] (6,2) rectangle (10,6);
+\draw[fill=Green!40] (6,6) rectangle (10,10);
+\draw[fill=Green!40] (2,6) rectangle (6,10);
+\draw[fill=Green!40] (0,6) rectangle (2,10);
+
+%%% k=5 %%%
+\draw[fill=blue!40] (10,0) rectangle (15,5);
+\draw[fill=blue!40] (10,5) rectangle (15,10);
+\draw[fill=blue!40] (10,10) rectangle (15,15);
+\draw[fill=blue!40] (5,10) rectangle (10,15);
+\draw[fill=blue!40] (0,10) rectangle (5,15);
+
+%%% k=6 (or k=n) %%%
+\draw[fill=violet!40] (15,0) rectangle (21,3) node[midway,font=\Large]{$\dfrac{n^2}{2}$};
+\draw[fill=violet!40] (15,3) rectangle (21,9) node[midway,font=\Large]{$n^2$};
+\draw[fill=violet!40] (15,9) rectangle (21,15) node[midway,font=\Large]{$n^2$};
+\draw[fill=violet!40] (15,15) rectangle (21,21) node[midway,font=\Large]{$n^2$};
+\draw[fill=violet!40] (9,15) rectangle (15,21) node[midway,font=\Large]{$n^2$};
+\draw[fill=violet!40] (3,15) rectangle (9,21) node[midway,font=\Large]{$n^2$};
+\draw[fill=violet!40] (0,15) rectangle (3,21) node[midway,font=\Large]{$\dfrac{n^2}{2}$};
+\draw[decoration={brace,mirror,amplitude=5pt,raise=2pt},decorate] (15,0)--(21,0) node[midway,below=12pt,font=\large]{$n$};
+\draw[decoration={brace,amplitude=5pt,raise=2pt},decorate] (0,15)--(0,21) node[midway,left=12pt,font=\large]{$n$};
+
+%Other decorations
+\node[font=\Large] at (10.5,-0.4) {$\cdots$\hspace{12mm}$\cdots$};
+\node[rotate=90,font=\Large] at (-0.4,10.5) {$\cdots$\hspace{12mm}$\cdots$};
+\end{tikzpicture}
+
+\begin{tikzpicture}[scale=0.6,every node/.style={transform shape}]
+%Defining colors for the squares
+\colorlet{col(1)}{red}
+\colorlet{col(2)}{Orange}
+\colorlet{col(3)}{Dandelion}
+\colorlet{col(4)}{Green}
+\colorlet{col(5)}{blue}
+\colorlet{col(6)}{violet}
+
+\foreach \n in {1,2,3,4,5,6}
+{%Defining parameters in terms of \n
+\pgfmathsetmacro{\s}{1/2*\n*(\n-1)}
+\pgfmathsetmacro{\c}{ceil(\n/2)-1}
+
+%Full squares
+\foreach \k in {0,...,\c}
+\draw[fill=col(\n)!40] (\s,{\s-\k*\n}) rectangle ++(\n,\n) node[midway,font=\Large]{$\n^2$};
+\ifnum\n>2 %Draw rectangle for \k=1 only when \n>2. This is due to the syntax {1,...,\c}, which by default includes \k=1 even though we do not want it when \n=1 and \n=2
+{\foreach \k in {1,...,\c}
+\draw[fill=col(\n)!40] ({\s-\k*\n},\s) rectangle ({\s-(\k-1)*\n},{\s+\n}) node[midway,font=\Large]{$\n^2$};}
+\else\fi
+
+%Half-squares for even values of \n
+\ifodd\n\else %Do nothing if \n is odd, do this if \n is even:
+{\draw[fill=col(\n)!40] (\s,0) rectangle ++(\n,{\n/2}) node[midway,font=\Large]{
+\ifnum\n=2 $\frac{\n^2}{2}$ %Print inline-size fraction for n=2
+\else $\dfrac{\n^2}{2}$ %Print display-size fraction for even n>2
+\fi};
+\draw[fill=col(\n)!40] (0,\s) rectangle ++({\n/2},\n) node[midway,font=\Large]{
+\ifnum\n=2 $\frac{\n^2}{2}$ %Print inline-size fraction for n=2
+\else $\dfrac{\n^2}{2}$ %Print display-size fraction for even n>2
+\fi};}
+\fi
+
+%Braces below and to the left of the large square
+\draw[decoration={brace,mirror,amplitude=5pt,raise=2pt},decorate] (\s,0)--++(\n,0) node[midway,below=12pt,font=\large]{$\n$};
+\draw[decoration={brace,amplitude=5pt,raise=2pt},decorate] (0,\s)--++(0,\n) node[midway,left=12pt,font=\large]{$\n$};
+}
+
+
+
+\end{tikzpicture}
 
 \begin{theorem}[Hockey Stick Identity]
     For all $n,k\in\N_0$, we have:
@@ -90,7 +181,7 @@ $\cos(x+y)=\cos(x)\cos(y)-\sin(x)\sin(y)$
     }
     
     \hockeystick{13}{2}
-    \hockeystick{7}{5}
+    \hockeystick{6}{3}
     
 \end{tikzpicture}
 
